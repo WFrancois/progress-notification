@@ -1,0 +1,24 @@
+{
+    "name": "WFrancois/log-stream",
+    "description": "Notify on kill",
+    "homepage": "https://github.com/WFrancois/progress-notification",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "François Wroblewski",
+            "email": "me@wisak.eu",
+            "homepage": "https://wisak.eu"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "slim/slim": "^3.1",
+        "slim/twig-view": "^2.2",
+        "slim/pdo": "~1.9"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ProgressNotification\\": "app/"
+        }
+    }
+}
