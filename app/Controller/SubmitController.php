@@ -54,11 +54,11 @@ class SubmitController extends BaseController
             'payloadParams' => array(
                 'guild' => 'Платинум',
                 'realm' => 'Soulflayer',
-                'region' => 'eu',
+                'region' => 'us',
                 'difficulty' => 'mythic',
                 'boss_ranks' => array(
-                    'world' => 1,
-                    'region' => 3106,
+                    'world' => 7,
+                    'region' => 2,
                     'realm' => 79,
                 ),
             ),
@@ -72,13 +72,20 @@ class SubmitController extends BaseController
             return;
         }
 
-        if ($payload['payloadParams']['boss_ranks']['world'] > 5) {
-            return;
-        }
-
         $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($payload['payloadParams']['boss_ranks']['world']);
 
-        $subscribers = PDO::getInstance()->select()->from('subscribers')->execute()->fetchAll();
+        $query = 'SELECT * FROM subscribers WHERE ';
+
+        $queryWhere[] = 'CAST(subscribers.subscribed_to->>\'world\' as int) >= ' .
+            intval($payload['payloadParams']['boss_ranks']['world']);
+        $queryWhere[] = 'CAST(subscribers.subscribed_to->>\'' . $payload['payloadParams']['region'] . '\' as int) >= ' .
+            intval($payload['payloadParams']['boss_ranks']['region']);
+
+        $stmt = PDO::getInstance()->query($query . implode(' OR ', $queryWhere));
+        $stmt->execute();
+        $subscribers = $stmt->fetchAll();
+
+        var_dump($subscribers);die;
 
         $data = [
             'title' => 'Yolo',
