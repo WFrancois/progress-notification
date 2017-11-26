@@ -32,7 +32,7 @@ SQL;
             $sql = <<<SQL
 INSERT INTO subscribers(subscribed_to, google_json) VALUES(:subscribed_to, :google_json) ON CONFLICT (google_json) DO UPDATE SET subscribed_to = :subscribed_to;
 SQL;
-            $params['subscribed_to'] = '["test"]';
+            $params['subscribed_to'] = \json_encode(['world' => 5]);
         }
 
         $stmt = PDO::getInstance()->prepare($sql);

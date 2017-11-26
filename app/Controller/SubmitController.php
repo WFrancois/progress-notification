@@ -9,6 +9,10 @@
 namespace ProgressNotification\Controller;
 
 
+use Minishlink\WebPush\WebPush;
+use ProgressNotification\Service\Notification;
+use ProgressNotification\Service\PDO;
+use ProgressNotification\Service\Util;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -28,7 +32,7 @@ class SubmitController extends BaseController
             'raidRanks' => array(
                 'world' => array(
                     'old' => 0,
-                    'new' => 8067,
+                    'new' => 1,
                 ),
                 'region' => array(
                     'old' => 0,
@@ -42,7 +46,7 @@ class SubmitController extends BaseController
             'bossRanks' => array(
                 'world' => array(
                     'old' => 0,
-                    'new' => 5338,
+                    'new' => 4,
                 ),
                 'region' => array(
                     'old' => 0,
@@ -59,17 +63,50 @@ class SubmitController extends BaseController
                 'region' => 'eu',
                 'difficulty' => 'mythic',
                 'boss_ranks' => array(
-                    'world' => 5338,
+                    'world' => 1,
                     'region' => 3106,
                     'realm' => 79,
                 ),
             ),
         ];
 
-        if($payload['difficulty'] !== 'mythic' || $payload['type'] !== 'guild_watch') {
+        if ($payload['type'] !== 'guild_watch_buffered' && $payload['type'] !== 'guild_watch') {
             return;
         }
 
+        if ($payload['difficulty'] !== 'mythic') {
+            return;
+        }
 
+        if ($payload['payloadParams']['boss_ranks']['world'] > 5) {
+            return;
+        }
+
+        $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($payload['payloadParams']['boss_ranks']['world']);
+
+        $webPush = Notification::getInstance();
+        $subscribers = PDO::getInstance()->select()->from('subscribers')->execute()->fetchAll();
+
+        $data = [
+            'title' => 'Yolo',
+            'text' => $message,
+        ];
+
+        foreach ($subscribers as $subscriber) {
+            $time = microtime(true);
+            $json = json_decode($subscriber['google_json'], true);
+            $notification['endpoint'] = $json['endpoint'];
+            $webPush->sendNotification(
+                $json['endpoint'] ?? '',
+                json_encode($data),
+                $json['keys']['p256dh'] ?? null,
+                $json['keys']['auth'] ?? null
+            );
+            echo 'time: ' . (microtime(true) - $time) . '<br />';
+        }
+
+        $time = microtime(true);
+        var_dump($webPush->flush());
+        echo 'time: ' . (microtime(true) - $time) . '<br />';
     }
 }

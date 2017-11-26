@@ -5,4 +5,4 @@ $app->get('/', \ProgressNotification\Controller\RegisterController::class . ':re
 
 $app->post('/ajax/register', \ProgressNotification\Controller\RegisterController::class . ':ajaxRegister')->setName('homePage');
 
-$app->post('/submit-kill', \ProgressNotification\Controller\SubmitController::class . ':submitKill')->setName('submitKill');
+$app->get('/submit-kill', \ProgressNotification\Controller\SubmitController::class . ':submitKill')->setName('submitKill');

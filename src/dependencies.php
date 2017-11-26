@@ -19,4 +19,5 @@ $container['view'] = function ($c) {
 
 $config = require __DIR__ . '/config.php';
 
-new \ProgressNotification\Service\PDO($config);
+new \ProgressNotification\Service\PDO($config['pdo']);
+new \ProgressNotification\Service\Notification($config['webPush']);

@@ -14,7 +14,8 @@
         "php": ">=7.0",
         "slim/slim": "^3.1",
         "slim/twig-view": "^2.2",
-        "slim/pdo": "~1.9"
+        "slim/pdo": "~1.9",
+        "minishlink/web-push": "^2.0"
     },
     "autoload-dev": {
         "psr-4": {
