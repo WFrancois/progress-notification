@@ -17,7 +17,6 @@ $container['view'] = function ($c) {
     return $view;
 };
 
-$config = require __DIR__ . '/config.php';
+$config = \json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 
 new \ProgressNotification\Service\PDO($config['pdo']);
-new \ProgressNotification\Service\Notification($config['webPush']);

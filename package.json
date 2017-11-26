@@ -1,0 +1,8 @@
+{
+  "name": "progress-notification",
+  "version": "0.0.1",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "web-push": "^3.2.4"
+  }
+}

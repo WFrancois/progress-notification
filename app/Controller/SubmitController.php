@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Francois
- * Date: 24/11/2017
- * Time: 22:03
- */
 
 namespace ProgressNotification\Controller;
 
 
-use Minishlink\WebPush\WebPush;
-use ProgressNotification\Service\Notification;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 use ProgressNotification\Service\PDO;
 use ProgressNotification\Service\Util;
 use Slim\Http\Request;
@@ -84,7 +78,6 @@ class SubmitController extends BaseController
 
         $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($payload['payloadParams']['boss_ranks']['world']);
 
-        $webPush = Notification::getInstance();
         $subscribers = PDO::getInstance()->select()->from('subscribers')->execute()->fetchAll();
 
         $data = [
@@ -92,21 +85,23 @@ class SubmitController extends BaseController
             'text' => $message,
         ];
 
+        $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+        $channel = $connection->channel();
+        $channel->queue_declare('notification', false, true, false, false);
+        $channel->exchange_declare('router', 'direct', false, true, false);
+        $channel->queue_bind('notification', 'router');
+
         foreach ($subscribers as $subscriber) {
-            $time = microtime(true);
-            $json = json_decode($subscriber['google_json'], true);
-            $notification['endpoint'] = $json['endpoint'];
-            $webPush->sendNotification(
-                $json['endpoint'] ?? '',
-                json_encode($data),
-                $json['keys']['p256dh'] ?? null,
-                $json['keys']['auth'] ?? null
-            );
-            echo 'time: ' . (microtime(true) - $time) . '<br />';
+            $messageBroker = [
+                'pushInfo' => \json_decode($subscriber['google_json'], true),
+                'message' => $data,
+            ];
+            $message = new AMQPMessage(\json_encode($messageBroker));
+            $channel->batch_basic_publish($message, 'router');
         }
 
-        $time = microtime(true);
-        var_dump($webPush->flush());
-        echo 'time: ' . (microtime(true) - $time) . '<br />';
+        $channel->publish_batch();
+        $channel->close();
+        $connection->close();
     }
 }
