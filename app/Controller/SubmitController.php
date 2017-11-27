@@ -65,7 +65,7 @@ class SubmitController extends BaseController
 //            ),
 //        ];
 
-        if($request->getHeader('HTTP_ACCESS_TOKEN')[0] !== Config::getInstance()->get('access_token')) {
+        if($request->getParam('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
