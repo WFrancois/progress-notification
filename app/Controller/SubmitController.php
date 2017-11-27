@@ -65,7 +65,7 @@ class SubmitController extends BaseController
 //            ),
 //        ];
 
-        if($request->getHeader('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
+        if($request->getHeader('HTTP_ACCESS_TOKEN')[0] !== Config::getInstance()->get('access_token')) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
@@ -83,7 +83,11 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-difficulty'])->withStatus(400);
         }
 
-        $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($payload['payloadParams']['boss_ranks']['world']);
+        $rankWorld = (int) $payload['payloadParams']['boss_ranks']['world'];
+        $rankRegion = (int) $payload['payloadParams']['boss_ranks']['region'];
+
+        $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($rankWorld) . ', ' .
+            Util::REGION[$payload['payloadParams']['region']] . ' ' . Util::getOrdinal($rankRegion);
 
         $query = 'SELECT * FROM subscribers WHERE ';
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: isak
- * Date: 11/27/17
- * Time: 1:34 PM
- */
 
 namespace ProgressNotification\Service;
 
@@ -19,6 +13,7 @@ class Config
     public function __construct(array $config)
     {
         $this->config = $config;
+        self::$instance = $this;
     }
 
     public static function getInstance(): Config
