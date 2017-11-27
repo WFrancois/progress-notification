@@ -24,7 +24,7 @@ class RegisterController extends BaseController
         $params = [
             'google_json' => $subscription,
         ];
-        if($unRegister === 'true') {
+        if ($unRegister === 'true') {
             $sql = <<<SQL
 DELETE FROM subscribers WHERE google_json = :google_json;
 SQL;
@@ -35,11 +35,11 @@ SQL;
 
             $subTo = $request->getParam('subTo');
             $subscribed_to = ['world' => 3];
-            if(is_array($subTo)) {
+            if (is_array($subTo)) {
                 $subscribed_to = [];
-                foreach($subTo as $region => $number) {
-                    if(!empty(Util::REGION[$region])) {
-                        $subscribed_to[$region] = (int) $number;
+                foreach ($subTo as $region => $number) {
+                    if (!empty(Util::REGION[$region]) && $number > 0 && $number < 20) {
+                        $subscribed_to[$region] = (int)$number;
                     }
                 }
             }
