@@ -83,11 +83,16 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-difficulty'])->withStatus(400);
         }
 
+        $bossId = (int) $payload['bossId'];
         $rankWorld = (int) $payload['payloadParams']['boss_ranks']['world'];
         $rankRegion = (int) $payload['payloadParams']['boss_ranks']['region'];
 
-        $message = $payload['payloadParams']['guild'] . ' killed bossId World ' . Util::getOrdinal($rankWorld) . ', ' .
-            Util::REGION[$payload['payloadParams']['region']] . ' ' . Util::getOrdinal($rankRegion);
+        if(empty(Util::getBossName($bossId))) {
+            return $response->withJson(['error' => 'incorrect-boss-id'])->withStatus(400);
+        }
+
+        $message = $payload['payloadParams']['guild'] . ' killed ' . Util::getBossName($bossId) .
+            ' World ' . Util::getOrdinal($rankWorld) . ', ' . Util::REGION[$payload['payloadParams']['region']] . ' ' . Util::getOrdinal($rankRegion);
 
         $query = 'SELECT * FROM subscribers WHERE ';
 
@@ -101,7 +106,7 @@ class SubmitController extends BaseController
         $subscribers = $stmt->fetchAll();
 
         $data = [
-            'title' => 'Yolo',
+            'title' => 'ProgRace',
             'text' => $message,
         ];
 
