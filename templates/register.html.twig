@@ -6,11 +6,48 @@
         <div class="clearfix">
             <button type="button" class="btn btn-outline-light js--switch-advanced float-right">Advanced</button>
         </div>
-        <div class="rounded border border-dark form-group" style="margin: 1rem 0;">
+        <div class="rounded border border-dark form-group  js--div-simple" style="margin: 1rem 0;">
             <div class="row justify-content-lg-center">
-                <label for="staticEmail" class="col-sm-2 col-form-label">World</label>
+                <label for="simple_world" class="col-sm-2 col-form-label">World</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input type="text" class="form-control" readonly id="staticEmail" value="3">
+                    <input type="text" class="form-control" id="simple_world" readonly value="3">
+                </div>
+            </div>
+        </div>
+        <div class="rounded border border-dark form-group js--div-advanced" style="margin: 1rem 0; display:none;">
+            <div class="form-group row justify-content-lg-center">
+                <label for="advanced_world" class="col-sm-2 col-form-label">World</label>
+                <div class="col-sm-10 col-lg-2">
+                    <input class="js--checkbox-active checkbox-active" data-target="advanced_world" type="checkbox" title="Activate World">
+                    <input type="number" class="form-control" id="advanced_world" value="3" style="display:none;">
+                </div>
+            </div>
+            <div class="form-group row justify-content-lg-center">
+                <label for="advanced_us" class="col-sm-2 col-form-label">US</label>
+                <div class="col-sm-10 col-lg-2">
+                    <input class="js--checkbox-active checkbox-active" data-target="advanced_us" type="checkbox" title="Activate US">
+                    <input type="number" class="form-control" id="advanced_us" value="3" style="display:none;">
+                </div>
+            </div>
+            <div class="form-group row justify-content-lg-center">
+                <label for="advanced_eu" class="col-sm-2 col-form-label">EU</label>
+                <div class="col-sm-10 col-lg-2">
+                    <input class="js--checkbox-active checkbox-active" data-target="advanced_eu" type="checkbox" title="Activate EU">
+                    <input type="number" class="form-control" id="advanced_eu" value="3" style="display:none;">
+                </div>
+            </div>
+            <div class="form-group row justify-content-lg-center">
+                <label for="advanced_kr" class="col-sm-2 col-form-label">KR</label>
+                <div class="col-sm-10 col-lg-2">
+                    <input class="js--checkbox-active checkbox-active" data-target="advanced_kr" type="checkbox" title="Activate KR">
+                    <input type="number" class="form-control" id="advanced_kr" value="3" style="display:none;">
+                </div>
+            </div>
+            <div class="form-group row justify-content-lg-center">
+                <label for="advanced_tw" class="col-sm-2 col-form-label">TW</label>
+                <div class="col-sm-10 col-lg-2">
+                    <input class="js--checkbox-active checkbox-active" data-target="advanced_tw" type="checkbox" title="Activate TW">
+                    <input type="number" class="form-control" id="advanced_tw" value="3" style="display:none;">
                 </div>
             </div>
         </div>
@@ -38,6 +75,14 @@
         .btn-success {
             background-color: #7fd81e;
             border-color: #7fd81e;
+        }
+
+        .checkbox-active {
+            position: absolute;
+            top: 50%;
+            display: block;
+            transform: translate(-50%,-50%);
+            left: 50%;
         }
     </style>
 {% endblock %}

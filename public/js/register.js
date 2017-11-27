@@ -1,5 +1,57 @@
-const applicationServerPublicKey = 'BFY6IR4YmNp2hLF5jcFLsQV1n6QTMjowGEv8dpjx99AT-7kuXDW_8DnqwbW1v_jX1SX76iuiK7vCN_TeyBMcMKg';
+/** Switch advanced/simple */
+var formAdvanced = false;
+$('.js--switch-advanced').on('click', function(e) {
+    formAdvanced = !formAdvanced;
+    if(formAdvanced) {
+        $('.js--div-advanced').show();
+        $('.js--div-simple').hide();
+        $(this).text('Simple');
+    } else {
+        $('.js--div-advanced').hide();
+        $('.js--div-simple').show();
+        $(this).text('Advanced');
+    }
+});
 
+/** Activate region */
+$('.js--checkbox-active').on('click', function(e) {
+    var idActivate = $(this).data('target');
+    $(this).remove();
+    $('#' + idActivate).show();
+});
+
+function getCurrentData() {
+    if(!formAdvanced) {
+        return {world: $('#simple_world').val()};
+    }
+
+    var data = {};
+    var inputWorld = $('#advanced_world');
+    if(inputWorld.css('display') !== 'none') {
+        data.world = inputWorld.val();
+    }
+    var inputUS = $('#advanced_us');
+    if(inputUS.css('display') !== 'none') {
+        data.us = inputUS.val();
+    }
+    var inputEU = $('#advanced_eu');
+    if(inputEU.css('display') !== 'none') {
+        data.eu = inputEU.val();
+    }
+    var inputKR = $('#advanced_kr');
+    if(inputKR.css('display') !== 'none') {
+        data.kr = inputKR.val();
+    }
+    var inputTW = $('#advanced_tw');
+    if(inputTW.css('display') !== 'none') {
+        data.tw = inputTW.val();
+    }
+
+    return data;
+}
+
+/** Submit Form */
+const applicationServerPublicKey = 'BFY6IR4YmNp2hLF5jcFLsQV1n6QTMjowGEv8dpjx99AT-7kuXDW_8DnqwbW1v_jX1SX76iuiK7vCN_TeyBMcMKg';
 var swRegistration = null;
 var serviceWorkerEnabled = false;
 var isSubscribed = false;
@@ -22,7 +74,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
         });
 } else {
     console.warn('Push messaging is not supported');
-    serviceWorkerEnabled = 'Push messaging is not support';
+    serviceWorkerEnabled = 'Push messaging is not supported';
     reloadUi();
 }
 
@@ -32,6 +84,7 @@ function reloadUi() {
     if (serviceWorkerEnabled !== true) {
         button.text(serviceWorkerEnabled);
         button.attr('disabled', true);
+        return;
     }
 
     button.removeAttr('disabled');
@@ -67,12 +120,13 @@ function subscribeUser() {
         applicationServerKey: applicationServerKey
     }).then(function (subscription) {
         console.log(subscription);
-        $.post('/ajax/register', {subscription: subscription.toJSON()}).done(function(data) {
+        $.post('/ajax/register', {subscription: subscription.toJSON(), subTo: getCurrentData()}).done(function(data) {
             isSubscribed = true;
             reloadUi();
         });
     }).catch(function (err) {
         console.log('Failed to subscribe the user: ', err);
+        serviceWorkerEnabled = 'Failed to subscribe the user';
         reloadUi();
     });
 }
