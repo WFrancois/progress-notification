@@ -3,6 +3,7 @@
 namespace ProgressNotification\Controller;
 
 
+use ProgressNotification\Service\Config;
 use ProgressNotification\Service\PDO;
 use ProgressNotification\Service\Util;
 use Slim\Http\Request;
@@ -12,7 +13,9 @@ class RegisterController extends BaseController
 {
     public function registerAction(Request $request, Response $response)
     {
-        return $this->view->render($response, 'register.html.twig');
+        return $this->view->render($response, 'register.html.twig', [
+            'applicationServerPublicKey' => Config::getInstance()->get('webPush')['publicKey'] ?? '',
+        ]);
     }
 
     public function ajaxRegister(Request $request, Response $response)

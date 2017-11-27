@@ -51,7 +51,6 @@ function getCurrentData() {
 }
 
 /** Submit Form */
-const applicationServerPublicKey = 'BFY6IR4YmNp2hLF5jcFLsQV1n6QTMjowGEv8dpjx99AT-7kuXDW_8DnqwbW1v_jX1SX76iuiK7vCN_TeyBMcMKg';
 var swRegistration = null;
 var serviceWorkerEnabled = false;
 var isSubscribed = false;

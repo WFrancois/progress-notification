@@ -6,6 +6,7 @@ namespace ProgressNotification\Controller;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use ProgressNotification\Service\Config;
+use ProgressNotification\Service\Log;
 use ProgressNotification\Service\PDO;
 use ProgressNotification\Service\Util;
 use Slim\Http\Request;
@@ -65,17 +66,18 @@ class SubmitController extends BaseController
 //            ),
 //        ];
 
-        if($request->getParam('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
+        if ($request->getParam('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
         $payload = $request->getParam('payload');
+        Log::add('receive-payload', ['payload' => $payload]);
 
         if ($payload['type'] !== 'guild_watch_buffered' && $payload['type'] !== 'guild_watch') {
             return $response->withJson(['error' => 'incorrect-type'])->withStatus(400);
         }
 
-        if($payload['raidId'] != 8638) {
+        if ($payload['raidId'] != 8638) {
             return $response->withJson(['error' => 'incorrect-raid'])->withStatus(400);
         }
 
@@ -83,23 +85,38 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-difficulty'])->withStatus(400);
         }
 
-        $bossId = (int) $payload['bossId'];
-        $rankWorld = (int) $payload['payloadParams']['boss_ranks']['world'];
-        $rankRegion = (int) $payload['payloadParams']['boss_ranks']['region'];
+        if (empty($payload['payloadParams']) || empty($payload['payloadParams']['boss_ranks']['world']) ||
+            empty($payload['payloadParams']['boss_ranks']['world'])) {
+            return $response->withJson(['error' => 'missing-rank'])->withStatus(400);
+        }
 
-        if(empty(Util::getBossName($bossId))) {
+        if (empty($payload['payloadParams']['guild'])) {
+            return $response->withJson(['error' => 'missing-guild'])->withStatus(400);
+        }
+
+        if (empty($payload['bossId']) || empty(Util::getBossName(intval($payload['bossId'])))) {
             return $response->withJson(['error' => 'incorrect-boss-id'])->withStatus(400);
         }
 
-        $message = $payload['payloadParams']['guild'] . ' killed ' . Util::getBossName($bossId) .
-            ' World ' . Util::getOrdinal($rankWorld) . ', ' . Util::REGION[$payload['payloadParams']['region']] . ' ' . Util::getOrdinal($rankRegion);
+        if(empty($payload['payloadParams']['region'])) {
+            return $response->withJson(['error' => 'missing-region'])->withStatus(400);
+        }
+
+        $bossId = (int)$payload['bossId'];
+        $rankWorld = (int)$payload['payloadParams']['boss_ranks']['world'];
+        $rankRegion = (int)$payload['payloadParams']['boss_ranks']['region'];
+        $guildName = $payload['payloadParams']['guild'];
+        $region = $payload['payloadParams']['region'];
+
+        $message = $guildName . ' killed ' . Util::getBossName($bossId) .
+            ' World ' . Util::getOrdinal($rankWorld) . ', ' . Util::REGION[$region] . ' ' . Util::getOrdinal($rankRegion);
 
         $query = 'SELECT * FROM subscribers WHERE ';
 
         $queryWhere[] = 'CAST(subscribers.subscribed_to->>\'world\' as int) >= ' .
-            intval($payload['payloadParams']['boss_ranks']['world']);
-        $queryWhere[] = 'CAST(subscribers.subscribed_to->>\'' . $payload['payloadParams']['region'] . '\' as int) >= ' .
-            intval($payload['payloadParams']['boss_ranks']['region']);
+            $rankWorld;
+        $queryWhere[] = 'CAST(subscribers.subscribed_to->>\'' . $region . '\' as int) >= ' .
+            $rankRegion;
 
         $stmt = PDO::getInstance()->query($query . implode(' OR ', $queryWhere));
         $stmt->execute();

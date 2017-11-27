@@ -73,6 +73,9 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script type="application/javascript">
+        const applicationServerPublicKey = '{{ application_public_key }}';
+    </script>
     <script type="application/javascript" src="/js/register.js"></script>
 {% endblock %}
 
