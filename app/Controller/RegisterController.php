@@ -14,7 +14,7 @@ class RegisterController extends BaseController
     public function registerAction(Request $request, Response $response)
     {
         return $this->view->render($response, 'register.html.twig', [
-            'applicationServerPublicKey' => Config::getInstance()->get('webPush')['publicKey'] ?? '',
+            'application_public_key' => Config::getInstance()->get('webPush')['publicKey'] ?? '',
         ]);
     }
 
