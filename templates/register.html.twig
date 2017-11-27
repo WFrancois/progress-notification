@@ -18,36 +18,51 @@
             <div class="form-group row justify-content-lg-center">
                 <label for="advanced_world" class="col-sm-2 col-form-label">World</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input class="js--checkbox-active checkbox-active" data-target="advanced_world" type="checkbox" title="Activate World">
-                    <input type="number" class="form-control" id="advanced_world" value="3" style="display:none;" min="1" max="10">
+                    <label class="js--checkbox-active checkbox-active" data-target="advanced_world">
+                        <input type="checkbox" title="Activate World">
+                    </label>
+                    <input type="number" class="form-control" id="advanced_world" value="3" style="display:none;"
+                           min="1" max="10">
                 </div>
             </div>
             <div class="form-group row justify-content-lg-center">
                 <label for="advanced_us" class="col-sm-2 col-form-label">US</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input class="js--checkbox-active checkbox-active" data-target="advanced_us" type="checkbox" title="Activate US">
-                    <input type="number" class="form-control" id="advanced_us" value="3" style="display:none;" min="1" max="10">
+                    <label class="js--checkbox-active checkbox-active" data-target="advanced_us">
+                        <input type="checkbox" title="Activate US">
+                    </label>
+                    <input type="number" class="form-control" id="advanced_us" value="3" style="display:none;" min="1"
+                           max="10">
                 </div>
             </div>
             <div class="form-group row justify-content-lg-center">
                 <label for="advanced_eu" class="col-sm-2 col-form-label">EU</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input class="js--checkbox-active checkbox-active" data-target="advanced_eu" type="checkbox" title="Activate EU">
-                    <input type="number" class="form-control" id="advanced_eu" value="3" style="display:none;" min="1" max="10">
+                    <label class="js--checkbox-active checkbox-active" data-target="advanced_eu">
+                        <input type="checkbox" title="Activate EU">
+                    </label>
+                    <input type="number" class="form-control" id="advanced_eu" value="3" style="display:none;" min="1"
+                           max="10">
                 </div>
             </div>
             <div class="form-group row justify-content-lg-center">
                 <label for="advanced_kr" class="col-sm-2 col-form-label">KR</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input class="js--checkbox-active checkbox-active" data-target="advanced_kr" type="checkbox" title="Activate KR">
-                    <input type="number" class="form-control" id="advanced_kr" value="3" style="display:none;" min="1" max="10">
+                    <label class="js--checkbox-active checkbox-active" data-target="advanced_kr">
+                        <input type="checkbox" title="Activate KR">
+                    </label>
+                    <input type="number" class="form-control" id="advanced_kr" value="3" style="display:none;" min="1"
+                           max="10">
                 </div>
             </div>
             <div class="form-group row justify-content-lg-center">
                 <label for="advanced_tw" class="col-sm-2 col-form-label">TW</label>
                 <div class="col-sm-10 col-lg-2">
-                    <input class="js--checkbox-active checkbox-active" data-target="advanced_tw" type="checkbox" title="Activate TW">
-                    <input type="number" class="form-control" id="advanced_tw" value="3" style="display:none;" min="1" max="10">
+                    <label class="js--checkbox-active checkbox-active" data-target="advanced_tw">
+                           <input type="checkbox" title="Activate TW">
+                    </label>
+                    <input type="number" class="form-control" id="advanced_tw" value="3" style="display:none;" min="1"
+                           max="10">
                 </div>
             </div>
         </div>
@@ -78,10 +93,15 @@
         }
 
         .checkbox-active {
+            width: 100%;
+            height: 100%;
+        }
+
+        .checkbox-active input {
             position: absolute;
             top: 50%;
             display: block;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             left: 50%;
         }
     </style>
