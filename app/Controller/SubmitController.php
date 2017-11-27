@@ -89,7 +89,7 @@ class SubmitController extends BaseController
         }
 
         if (empty($payload['payloadParams']) || empty($payload['payloadParams']['boss_ranks']['world']) ||
-            empty($payload['payloadParams']['boss_ranks']['world'])) {
+            empty($payload['payloadParams']['boss_ranks']['region'])) {
             Log::add('missing-rank', ['payload' => $payload]);
             return $response->withJson(['error' => 'missing-rank'])->withStatus(400);
         }
