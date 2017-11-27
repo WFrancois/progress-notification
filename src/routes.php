@@ -7,4 +7,4 @@ $app->get('/about', \ProgressNotification\Controller\AboutController::class)->se
 
 $app->post('/ajax/register', \ProgressNotification\Controller\RegisterController::class . ':ajaxRegister')->setName('registerAjax');
 
-$app->get('/submit-kill', \ProgressNotification\Controller\SubmitController::class . ':submitKill')->setName('submitKill');
+$app->post('/submit-kill', \ProgressNotification\Controller\SubmitController::class . ':submitKill')->setName('submitKill');

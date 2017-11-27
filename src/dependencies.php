@@ -18,5 +18,6 @@ $container['view'] = function ($c) {
 };
 
 $config = \json_decode(file_get_contents(__DIR__ . '/config.json'), true);
+$config = new \ProgressNotification\Service\Config($config);
 
-new \ProgressNotification\Service\PDO($config['pdo']);
+new \ProgressNotification\Service\PDO($config->get('pdo'));
