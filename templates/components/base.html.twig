@@ -14,7 +14,14 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="bg-dark text-white">
-{% block content %}{% endblock %}
+<div class="container">
+    {% block content %}{% endblock %}
+    <footer class="fixed-bottom text-center text-secondary">
+        <p>
+            Powered by <a href="https://raider.io" class="text-light">Raider.IO</a> - <a href="{{ path_for('aboutPage') }}">About</a>
+        </p>
+    </footer>
+</div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>

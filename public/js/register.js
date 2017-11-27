@@ -83,6 +83,7 @@ var button = $('.js--submit-button');
 function reloadUi() {
     if (serviceWorkerEnabled !== true) {
         button.text(serviceWorkerEnabled);
+        button.addClass('btn-danger');
         button.attr('disabled', true);
         return;
     }
@@ -90,8 +91,12 @@ function reloadUi() {
     button.removeAttr('disabled');
     if (isSubscribed) {
         button.text('Disable notification');
+        button.addClass('btn-warning');
+        button.removeClass('btn-success');
     } else {
         button.text('Enable notification');
+        button.removeClass('btn-warning');
+        button.addClass('btn-success');
     }
 }
 
