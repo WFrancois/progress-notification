@@ -16,56 +16,6 @@ class SubmitController extends BaseController
 {
     public function submitKill(Request $request, Response $response)
     {
-//        $payload = [
-//            'type' => 'guild_watch',
-//            'guildId' => 537672,
-//            'bossId' => 118523,
-//            'raidId' => 8524,
-//            'bossCount' => 1,
-//            'totalBosses' => 9,
-//            'difficulty' => 'mythic',
-//            'defeatedAt' => '2017-11-23T20:14:00.000Z',
-//            'raidRanks' => array(
-//                'world' => array(
-//                    'old' => 0,
-//                    'new' => 1,
-//                ),
-//                'region' => array(
-//                    'old' => 0,
-//                    'new' => 4658,
-//                ),
-//                'realm' => array(
-//                    'old' => 0,
-//                    'new' => 116,
-//                ),
-//            ),
-//            'bossRanks' => array(
-//                'world' => array(
-//                    'old' => 0,
-//                    'new' => 4,
-//                ),
-//                'region' => array(
-//                    'old' => 0,
-//                    'new' => 3106,
-//                ),
-//                'realm' => array(
-//                    'old' => 0,
-//                    'new' => 79,
-//                ),
-//            ),
-//            'payloadParams' => array(
-//                'guild' => 'Платинум',
-//                'realm' => 'Soulflayer',
-//                'region' => 'us',
-//                'difficulty' => 'mythic',
-//                'boss_ranks' => array(
-//                    'world' => 7,
-//                    'region' => 2,
-//                    'realm' => 79,
-//                ),
-//            ),
-//        ];
-
         if ($request->getParam('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
