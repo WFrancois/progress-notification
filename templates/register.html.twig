@@ -19,10 +19,10 @@
                 <hr>
             </div>
         </div>
-        {% set region = {'world': 'World', 'eu': 'Europe', 'us': 'Americas/OC', 'kr': 'Korea', 'tw': 'Taiwan'} %}
+        {% set region = {'world': 'World', 'eu': 'Europe', 'us': 'US / OC', 'kr': 'Korea', 'tw': 'Taiwan'} %}
         {% for key, label in region %}
             <div class="form-group row justify-content-lg-center">
-                <label for="checkbox_{{ key }}" class="col-lg-2 col-2 col-form-label">{{ label }}</label>
+                <label for="checkbox_{{ key }}" class="col-lg-1 col-2 col-form-label">{{ label }}</label>
                 <div class="col-4 col-lg-1">
                     <div class="checkbox-active">
                         <input type="checkbox" id="checkbox_{{ key }}" class="js--checkbox-active"
@@ -34,7 +34,7 @@
                     <div class="input-group"
                          id="advanced_{{ key }}" {% if key != 'world' %} style="display:none;" {% endif %}>
                         <span class="input-group-addon">Top</span>
-                        <input title="Top {{ label }}" type="number" class="form-control" value="3" min="1" max="10">
+                        <input title="Top {{ label }}" type="number" class="form-control" value="3" min="1" max="20">
                     </div>
                 </div>
             </div>
