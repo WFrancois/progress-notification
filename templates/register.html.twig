@@ -22,7 +22,7 @@
         {% set region = {'world': 'World', 'eu': 'Europe', 'us': 'US / OC', 'kr': 'Korea', 'tw': 'Taiwan'} %}
         {% for key, label in region %}
             <div class="form-group row justify-content-lg-center">
-                <label for="checkbox_{{ key }}" class="col-lg-1 col-2 col-form-label">{{ label }}</label>
+                <label for="checkbox_{{ key }}" class="col-lg-1 col-3 col-form-label">{{ label }}</label>
                 <div class="col-4 col-lg-1">
                     <div class="checkbox-active">
                         <input type="checkbox" id="checkbox_{{ key }}" class="js--checkbox-active"
@@ -30,7 +30,7 @@
                                title="Activate {{ label }}">
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-5 col-lg-3">
                     <div class="input-group"
                          id="advanced_{{ key }}" {% if key != 'world' %} style="display:none;" {% endif %}>
                         <span class="input-group-addon">Top</span>

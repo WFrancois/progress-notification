@@ -24,5 +24,5 @@ open.then(function(conn) {
                 ch.ack(msg);
             }
         });
-    });
+    }).catch(console.warn);
 }).catch(console.warn);
