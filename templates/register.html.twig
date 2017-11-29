@@ -5,11 +5,11 @@
     <p></p>
     <div class="rounded border border-dark form-group js--div-advanced" style="margin: 1rem 0;">
         <div class="row justify-content-lg-center">
-            <div class="col-lg-2">
+            <div class="col-5 col-lg-2">
                 <b>Which region ?</b>
             </div>
-            <div class="col-lg-2">
-                <b>And how many ?</b>
+            <div class="col-7 col-lg-2">
+                <b>And how many guilds ?</b>
             </div>
         </div>
         <div class="row justify-content-lg-center">
@@ -21,14 +21,14 @@
         {% for key, label in region %}
             <div class="form-group row justify-content-lg-center">
                 <label for="checkbox_{{ key }}" class="col-1 col-form-label">{{ label }}</label>
-                <div class="col-10 col-lg-1">
+                <div class="col-4 col-lg-1">
                     <div class="checkbox-active">
                         <input type="checkbox" id="checkbox_{{ key }}" class="js--checkbox-active"
                                data-target="advanced_{{ key }}"
                                title="Activate {{ label }}">
                     </div>
                 </div>
-                <div class="col-10 col-lg-2">
+                <div class="col-6 col-lg-2">
                     <div class="input-group" id="advanced_{{ key }}" style="display:none;">
                         <span class="input-group-addon">Top</span>
                         <input title="Top {{ label }}" type="number" class="form-control" value="3" min="1" max="10">
