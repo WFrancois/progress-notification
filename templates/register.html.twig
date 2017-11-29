@@ -1,8 +1,10 @@
 {% extends 'components/base.html.twig' %}
 
 {% block content %}
-    <h1 class="text-center">Get Progress Notification</h1>
-    <p></p>
+    <h1 class="text-center" style="margin-bottom:3rem;">Get Progress Notification</h1>
+    <div class="row" style="text-align:center;">
+        <p class="lead col-lg">Do you want to follow the Antorus' race ? Subscribe below to get notified ! :)</p>
+    </div>
     <div class="rounded border border-dark form-group js--div-advanced" style="margin: 1rem 0;">
         <div class="row justify-content-lg-center">
             <div class="col-5 col-lg-2">
@@ -17,7 +19,7 @@
                 <hr>
             </div>
         </div>
-        {% set region = {'world': 'World', 'eu': 'EU', 'us': 'US', 'kr': 'KR', 'tw': 'TW'} %}
+        {% set region = {'world': 'World', 'eu': 'Europe', 'us': 'Americas', 'kr': 'Korea', 'tw': 'Taiwan'} %}
         {% for key, label in region %}
             <div class="form-group row justify-content-lg-center">
                 <label for="checkbox_{{ key }}" class="col-lg-1 col-1 col-form-label">{{ label }}</label>
@@ -29,7 +31,8 @@
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
-                    <div class="input-group" id="advanced_{{ key }}" {% if key != 'world' %} style="display:none;" {% endif %}>
+                    <div class="input-group"
+                         id="advanced_{{ key }}" {% if key != 'world' %} style="display:none;" {% endif %}>
                         <span class="input-group-addon">Top</span>
                         <input title="Top {{ label }}" type="number" class="form-control" value="3" min="1" max="10">
                     </div>
