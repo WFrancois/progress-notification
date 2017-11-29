@@ -13,23 +13,23 @@ function getCurrentData() {
     var data = {};
     var inputWorld = $('#advanced_world');
     if(inputWorld.css('display') !== 'none') {
-        data.world = inputWorld.val();
+        data.world = inputWorld.find('input').val();
     }
     var inputUS = $('#advanced_us');
     if(inputUS.css('display') !== 'none') {
-        data.us = inputUS.val();
+        data.us = inputUS.find('input').val();
     }
     var inputEU = $('#advanced_eu');
     if(inputEU.css('display') !== 'none') {
-        data.eu = inputEU.val();
+        data.eu = inputEU.find('input').val();
     }
     var inputKR = $('#advanced_kr');
     if(inputKR.css('display') !== 'none') {
-        data.kr = inputKR.val();
+        data.kr = inputKR.find('input').val();
     }
     var inputTW = $('#advanced_tw');
     if(inputTW.css('display') !== 'none') {
-        data.tw = inputTW.val();
+        data.tw = inputTW.find('input').val();
     }
 
     return data;
