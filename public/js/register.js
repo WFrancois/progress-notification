@@ -1,30 +1,15 @@
-/** Switch advanced/simple */
-var formAdvanced = false;
-$('.js--switch-advanced').on('click', function(e) {
-    formAdvanced = !formAdvanced;
-    if(formAdvanced) {
-        $('.js--div-advanced').show();
-        $('.js--div-simple').hide();
-        $(this).text('Simple');
-    } else {
-        $('.js--div-advanced').hide();
-        $('.js--div-simple').show();
-        $(this).text('Advanced');
-    }
-});
-
 /** Activate region */
 $('.js--checkbox-active').on('click', function(e) {
     var idActivate = $(this).data('target');
-    $(this).remove();
-    $('#' + idActivate).show();
+
+    if($(this).is(':checked')) {
+        $('#' + idActivate).show();
+    } else {
+        $('#' + idActivate).hide();
+    }
 });
 
 function getCurrentData() {
-    if(!formAdvanced) {
-        return {world: $('#simple_world').val()};
-    }
-
     var data = {};
     var inputWorld = $('#advanced_world');
     if(inputWorld.css('display') !== 'none') {
