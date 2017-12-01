@@ -82,7 +82,7 @@ class SubmitController extends BaseController
         $data = [
             'title' => 'ProgRace',
             'text' => $message,
-            'icon' => '/img/' . $bossId . '.png',
+            'icon' => '/img/' . $bossId . '.jpg',
         ];
 
         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
