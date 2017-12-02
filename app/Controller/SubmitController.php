@@ -64,9 +64,9 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
-        if(empty($payload['region']['name'])) {
+        if(empty($payload['region']['shortName'])) {
             Log::add('missing-region-name', ['payload' => $payload]);
-            return $response->withJson(['error' => 'missing-region-name'])->withStatus(400);
+            return $response->withJson(['error' => 'missing-region-short-name'])->withStatus(400);
         }
 
         $bossId = (int)$payload['boss']['id'];
@@ -81,7 +81,7 @@ class SubmitController extends BaseController
         }
 
         $message = $guildName . ' killed ' . $bossName .
-            ' World ' . Util::getOrdinal($rankWorld) . ', ' . $payload['region']['name'] . ' ' . Util::getOrdinal($rankRegion);
+            ' World ' . Util::getOrdinal($rankWorld) . ', ' . $payload['region']['shortName'] . ' ' . Util::getOrdinal($rankRegion);
 
         $query = 'SELECT * FROM subscribers WHERE ';
 
