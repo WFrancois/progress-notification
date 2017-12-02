@@ -1,0 +1,55 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.main {
+    min-height: 100%;
+    margin-bottom: -6rem;
+}
+
+footer, .push {
+    height: 6rem;
+}
+
+header {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/img/header.jpg) center;
+    text-align:center;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    margin-bottom:1rem;
+}
+
+header p {
+    font-size: 1.5rem;
+}
+
+.chose_region li {
+    list-style-type: none;
+}
+
+.chose_region li label {
+    margin-bottom:0;
+}
+
+.list_to_do {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.btn-success {
+    background-color: #7fd81e;
+    border-color: #7fd81e;
+    color: black;
+}
+
+footer .alert_discord {
+
+    font-size: 0.95rem;
+}
+
+footer .alert_discord a {
+    color: inherit;
+    text-decoration: underline;
+}
