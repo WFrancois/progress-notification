@@ -98,7 +98,7 @@ class SubmitController extends BaseController
         $subscribers = $stmt->fetchAll();
 
         $data = [
-            'title' => 'ProgRace',
+            'title' => 'Raid Progress Update!',
             'text' => $message,
             'icon' => '/img/' . $bossId . '.jpg',
             'url' => $payload['guildProfileUrl'],
