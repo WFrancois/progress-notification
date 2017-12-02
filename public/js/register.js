@@ -29,7 +29,10 @@ var swRegistration = null;
 var serviceWorkerEnabled = false;
 var isSubscribed = false;
 
-if ('serviceWorker' in navigator && 'PushManager' in window) {
+var button = $('.js--submit-button');
+console.log(button);
+
+if (false && 'serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
     serviceWorkerEnabled = true;
 
@@ -51,12 +54,11 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     reloadUi();
 }
 
-var button = $('.js--submit-button');
-
 function reloadUi() {
     if (serviceWorkerEnabled !== true) {
         button.text(serviceWorkerEnabled);
         button.addClass('btn-danger');
+        button.removeClass('btn-success');
         button.attr('disabled', true);
         return;
     }
