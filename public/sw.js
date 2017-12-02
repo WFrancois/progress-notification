@@ -10,6 +10,7 @@ self.addEventListener('push', function (event) {
     const options = {
         body: data.text,
         icon: data.icon,
+        badge: '/img/favicon128.png',
         data: {
             url: data.url
         }
