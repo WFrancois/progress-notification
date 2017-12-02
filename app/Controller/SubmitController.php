@@ -59,11 +59,17 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
+        if(empty($payload['payloadParams']['realm'])) {
+            Log::add('missing-realm', ['payload' => $payload]);
+            return $response->withJson(['error' => 'missing-realm'])->withStatus(400);
+        }
+
         $bossId = (int)$payload['bossId'];
         $rankWorld = (int)$payload['payloadParams']['boss_ranks']['world'];
         $rankRegion = (int)$payload['payloadParams']['boss_ranks']['region'];
         $guildName = $payload['payloadParams']['guild'];
         $region = $payload['payloadParams']['region'];
+        $realm = $payload['payloadParams']['realm'];
 
         $message = $guildName . ' killed ' . Util::getBossName($bossId) .
             ' World ' . Util::getOrdinal($rankWorld) . ', ' . Util::REGION[$region] . ' ' . Util::getOrdinal($rankRegion);
@@ -83,6 +89,7 @@ class SubmitController extends BaseController
             'title' => 'ProgRace',
             'text' => $message,
             'icon' => '/img/' . $bossId . '.jpg',
+            'url' => 'https://raider.io/guilds/' . $region . '/' . $realm . '/' . $guildName,
         ];
 
         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
