@@ -11,32 +11,34 @@
           integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
           crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <style>
-        html, body {
-            padding-top: 1rem;
-            height: 100%;
-            width: 100%;
-            margin: 0;
-        }
-
-        .container {
-            min-height: 100%;
-            margin-bottom: -2.5rem;
-        }
-
-        footer, .push {
-            height: 2.5rem;
-        } </style>
+    <link href="/css/style.css" rel="stylesheet">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="bg-dark text-white">
-<div class="container">
-    {% block content %}{% endblock %}
-    <div class="push"></div>
+<div class="main">
+    <header>
+        <h1>Antorus, the Burning Throne</h1>
+        <p>
+            Get Raid Progress<br/>
+            Notifications in Real-Time
+        </p>
+    </header>
+    <div class="container">
+        {% block content %}{% endblock %}
+        <div class="push"></div>
+    </div>
 </div>
 <footer class="text-center text-secondary" style="padding-top:1rem;">
-    <a class="text-light" href="mailto:contact@prograce.info">Isak<span class="d-none d-sm-inline"> (contact@prograce.info)</span></a> - Powered with <a href="https://raider.io" class="text-light">Raider.IO</a> -
-    <a href="https://github.com/WFrancois/progress-notification" class="text-light"><i class="fa fa-github"></i><span class="d-none d-sm-inline"> GitHub</span></a>
+    <p class="text-light alert_discord">
+        Use Discord ? <a href="https://raider.io/discord" class="link_alert">Get these alerts</a> directly in your Discord !
+    </p>
+    <p>
+        <a class="text-light" href="mailto:contact@prograce.info">Isak<span class="d-none d-sm-inline"> (contact@prograce.info)</span></a>
+        - Powered with <a href="https://raider.io" class="text-light">Raider.IO</a> -
+        <a href="https://github.com/WFrancois/progress-notification" class="text-light"><i
+                    class="fa fa-github"></i><span
+                    class="d-none d-sm-inline"> GitHub</span></a>
+    </p>
 </footer>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="

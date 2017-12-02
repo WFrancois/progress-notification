@@ -11,26 +11,13 @@ $('.js--checkbox-active').on('click', function(e) {
 
 function getCurrentData() {
     var data = {};
-    var inputWorld = $('#advanced_world');
-    if(inputWorld.css('display') !== 'none') {
-        data.world = inputWorld.find('input').val();
-    }
-    var inputUS = $('#advanced_us');
-    if(inputUS.css('display') !== 'none') {
-        data.us = inputUS.find('input').val();
-    }
-    var inputEU = $('#advanced_eu');
-    if(inputEU.css('display') !== 'none') {
-        data.eu = inputEU.find('input').val();
-    }
-    var inputKR = $('#advanced_kr');
-    if(inputKR.css('display') !== 'none') {
-        data.kr = inputKR.find('input').val();
-    }
-    var inputTW = $('#advanced_tw');
-    if(inputTW.css('display') !== 'none') {
-        data.tw = inputTW.find('input').val();
-    }
+
+    var howMany = $('.js--how-many-guilds').val();
+
+    $('.js--chose-region').each(function(item, e) {
+        var region = $(item).data('region');
+        data[region] = howMany;
+    });
 
     return data;
 }
