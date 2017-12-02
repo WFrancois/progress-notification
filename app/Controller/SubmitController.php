@@ -16,11 +16,11 @@ class SubmitController extends BaseController
 {
     public function submitKill(Request $request, Response $response)
     {
-        if ($request->getParam('ACCESS_TOKEN') !== Config::getInstance()->get('access_token')) {
+        if ($request->getHeader('X-RaiderIO-Signature')[0] !== Config::getInstance()->get('access_token')) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
-        $payload = $request->getParam('payload');
+        $payload = $request->getParams();
         Log::add('receive-payload', ['payload' => $payload]);
 
         if ($payload['type'] !== 'guild_progress_updated') {
@@ -54,7 +54,7 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-boss-id'])->withStatus(400);
         }
 
-        if(empty($payload['guild']['url'])) {
+        if(empty($payload['guildProfileUrl'])) {
             Log::add('missing-url', ['payload' => $payload]);
             return $response->withJson(['error' => 'missing-url'])->withStatus(400);
         }
@@ -98,7 +98,7 @@ class SubmitController extends BaseController
             'title' => 'ProgRace',
             'text' => $message,
             'icon' => '/img/' . $bossId . '.jpg',
-            'url' => $payload['guild']['url'],
+            'url' => $payload['guildProfileUrl'],
         ];
 
         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
