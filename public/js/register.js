@@ -32,7 +32,7 @@ var isSubscribed = false;
 var button = $('.js--submit-button');
 console.log(button);
 
-if (false && 'serviceWorker' in navigator && 'PushManager' in window) {
+if ('serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
     serviceWorkerEnabled = true;
 
