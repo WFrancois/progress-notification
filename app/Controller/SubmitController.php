@@ -59,9 +59,14 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
-        if(empty($payload['payloadParams']['realm'])) {
-            Log::add('missing-realm', ['payload' => $payload]);
-            return $response->withJson(['error' => 'missing-realm'])->withStatus(400);
+        if(empty($payload['guild']['url'])) {
+            Log::add('missing-url', ['payload' => $payload]);
+            return $response->withJson(['error' => 'missing-url'])->withStatus(400);
+        }
+
+        if(empty($payload['region']['name'])) {
+            Log::add('missing-region-name', ['payload' => $payload]);
+            return $response->withJson(['error' => 'missing-region-name'])->withStatus(400);
         }
 
         $bossId = (int)$payload['bossId'];
@@ -69,10 +74,14 @@ class SubmitController extends BaseController
         $rankRegion = (int)$payload['payloadParams']['boss_ranks']['region'];
         $guildName = $payload['payloadParams']['guild'];
         $region = $payload['payloadParams']['region'];
-        $realm = $payload['payloadParams']['realm'];
 
-        $message = $guildName . ' killed ' . Util::getBossName($bossId) .
-            ' World ' . Util::getOrdinal($rankWorld) . ', ' . Util::REGION[$region] . ' ' . Util::getOrdinal($rankRegion);
+        $bossName = Util::getBossName($bossId);
+        if(!empty($payload['boss']['name'])) {
+            $bossName = $payload['boss']['name'];
+        }
+
+        $message = $guildName . ' killed ' . $bossName .
+            ' World ' . Util::getOrdinal($rankWorld) . ', ' . $payload['region']['name'] . ' ' . Util::getOrdinal($rankRegion);
 
         $query = 'SELECT * FROM subscribers WHERE ';
 
@@ -89,7 +98,7 @@ class SubmitController extends BaseController
             'title' => 'ProgRace',
             'text' => $message,
             'icon' => '/img/' . $bossId . '.jpg',
-            'url' => 'https://raider.io/guilds/' . $region . '/' . $realm . '/' . $guildName,
+            'url' => $payload['guild']['url'],
         ];
 
         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
