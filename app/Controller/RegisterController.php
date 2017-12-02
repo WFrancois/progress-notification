@@ -41,7 +41,7 @@ SQL;
             if (is_array($subTo)) {
                 $subscribed_to = [];
                 foreach ($subTo as $region => $number) {
-                    if (!empty(Util::REGION[$region]) && $number > 0 && $number < 20) {
+                    if (!empty(Util::REGION[$region]) && $number > 0 && $number <= 20) {
                         $subscribed_to[$region] = (int)$number;
                     }
                 }
