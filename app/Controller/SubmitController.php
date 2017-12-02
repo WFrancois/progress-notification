@@ -23,12 +23,12 @@ class SubmitController extends BaseController
         $payload = $request->getParam('payload');
         Log::add('receive-payload', ['payload' => $payload]);
 
-        if ($payload['type'] !== 'guild_watch_buffered' && $payload['type'] !== 'guild_watch') {
+        if ($payload['type'] !== 'guild_progress_updated') {
             Log::add('incorrect-type', ['payload' => $payload]);
             return $response->withJson(['error' => 'incorrect-type'])->withStatus(400);
         }
 
-        if ($payload['raidId'] != 8638) {
+        if ($payload['raid']['id'] != 8638) {
             Log::add('incorrect-raid', ['payload' => $payload]);
             return $response->withJson(['error' => 'incorrect-raid'])->withStatus(400);
         }
@@ -38,25 +38,20 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-difficulty'])->withStatus(400);
         }
 
-        if (empty($payload['payloadParams']) || empty($payload['payloadParams']['boss_ranks']['world']) ||
-            empty($payload['payloadParams']['boss_ranks']['region'])) {
+        if (empty($payload['bossRanks']) || empty($payload['bossRanks']['world']['new']) ||
+            empty($payload['bossRanks']['region']['new'])) {
             Log::add('missing-rank', ['payload' => $payload]);
             return $response->withJson(['error' => 'missing-rank'])->withStatus(400);
         }
 
-        if (empty($payload['payloadParams']['guild'])) {
+        if (empty($payload['guild']['name'])) {
             Log::add('missing-guild', ['payload' => $payload]);
             return $response->withJson(['error' => 'missing-guild'])->withStatus(400);
         }
 
-        if (empty($payload['bossId']) || empty(Util::getBossName(intval($payload['bossId'])))) {
+        if (empty($payload['boss']['id']) || empty(Util::getBossName(intval($payload['boss']['id'])))) {
             Log::add('incorrect-boss-id', ['payload' => $payload]);
             return $response->withJson(['error' => 'incorrect-boss-id'])->withStatus(400);
-        }
-
-        if(empty($payload['payloadParams']['region'])) {
-            Log::add('missing-region', ['payload' => $payload]);
-            return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
         if(empty($payload['guild']['url'])) {
@@ -64,16 +59,21 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-url'])->withStatus(400);
         }
 
+        if(empty($payload['region']['slug'])) {
+            Log::add('missing-region', ['payload' => $payload]);
+            return $response->withJson(['error' => 'missing-region'])->withStatus(400);
+        }
+
         if(empty($payload['region']['name'])) {
             Log::add('missing-region-name', ['payload' => $payload]);
             return $response->withJson(['error' => 'missing-region-name'])->withStatus(400);
         }
 
-        $bossId = (int)$payload['bossId'];
-        $rankWorld = (int)$payload['payloadParams']['boss_ranks']['world'];
-        $rankRegion = (int)$payload['payloadParams']['boss_ranks']['region'];
-        $guildName = $payload['payloadParams']['guild'];
-        $region = $payload['payloadParams']['region'];
+        $bossId = (int)$payload['boss']['id'];
+        $rankWorld = (int)$payload['bossRanks']['world']['new'];
+        $rankRegion = (int)$payload['bossRanks']['region']['new'];
+        $guildName = $payload['guild']['name'];
+        $region = $payload['region']['slug'];
 
         $bossName = Util::getBossName($bossId);
         if(!empty($payload['boss']['name'])) {
