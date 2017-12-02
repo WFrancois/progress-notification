@@ -16,7 +16,10 @@ class SubmitController extends BaseController
 {
     public function submitKill(Request $request, Response $response)
     {
-        if ($request->getHeader('HTTP_X_RAIDERIO_SIGNATURE')[0] !== Config::getInstance()->get('access_token')) {
+        $rawPayload = file_get_contents("php://input");
+        $sign = hash_hmac('md5', $rawPayload, Config::getInstance()->get('access_token'));
+
+        if($request->getHeader('HTTP_X_RAIDERIO_SIGNATURE')[0] !== $sign) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
