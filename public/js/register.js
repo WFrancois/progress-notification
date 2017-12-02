@@ -12,11 +12,13 @@ $('.js--checkbox-active').on('click', function(e) {
 function getCurrentData() {
     var data = {};
 
-    var howMany = $('.js--how-many-guilds').val();
+    var howMany = parseInt($('.js--how-many-guilds').val());
 
-    $('.js--chose-region').each(function(item, e) {
-        var region = $(item).data('region');
-        data[region] = howMany;
+    $('.js--chose-region').each(function(i, item) {
+        if($(item).is(':checked')) {
+            var region = $(item).data('region');
+            data[region] = howMany;
+        }
     });
 
     return data;
