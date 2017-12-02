@@ -32,13 +32,13 @@ class SubmitController extends BaseController
         }
 
         if ($payload['raid']['id'] != 8638) {
-            Log::add('incorrect-raid', ['payload' => $payload]);
-            return $response->withJson(['error' => 'incorrect-raid'])->withStatus(400);
+            Log::add('only-log-antorus', ['payload' => $payload]);
+            return $response->withJson(['error' => 'only-log-antorus']);
         }
 
         if ($payload['difficulty'] !== 'mythic') {
-            Log::add('incorrect-difficulty', ['payload' => $payload]);
-            return $response->withJson(['error' => 'incorrect-difficulty'])->withStatus(400);
+            Log::add('only-log-mythic', ['payload' => $payload]);
+            return $response->withJson(['error' => 'only-log-mythic']);
         }
 
         if (empty($payload['bossRanks']) || empty($payload['bossRanks']['world']['new']) ||
