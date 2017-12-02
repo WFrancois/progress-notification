@@ -14,7 +14,7 @@ footer, .push {
 }
 
 header {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/img/header.png) center;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/img/header.jpg) center;
     text-align:center;
     padding-bottom: 3rem;
     padding-top: 3rem;
