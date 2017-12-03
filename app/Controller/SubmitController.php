@@ -16,6 +16,7 @@ class SubmitController extends BaseController
 {
     public function submitKill(Request $request, Response $response)
     {
+        $time = microtime(true);
         $rawPayload = file_get_contents("php://input");
         $sign = hash_hmac('md5', $rawPayload, Config::getInstance()->get('access_token'));
 
@@ -123,5 +124,7 @@ class SubmitController extends BaseController
         $channel->publish_batch();
         $channel->close();
         $connection->close();
+
+        Log::add('done', ['payload' => $payload, 'time' => microtime(true) - $time]);
     }
 }
