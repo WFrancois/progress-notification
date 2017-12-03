@@ -67,12 +67,10 @@ $(document).ready(function () {
         }
 
         $.post('/ajax/current-subscription', {subscription: subscription.toJSON()}, function (data) {
+            isSubscribed = true;
             if (!data.regions || !data.howMuch) {
-                isSubscribed = false;
                 return;
             }
-
-            isSubscribed = true;
 
             if(!untouchForm) {
                 return;
@@ -87,7 +85,12 @@ $(document).ready(function () {
             });
 
             $('.js--how-many-guilds').val(data.howMuch);
-        }, 'json').always(function () {
+        }, 'json').catch(function(e) {
+            if(e.status === 404) {
+                subscription.unsubscribe();
+                isSubscribed = false;
+            }
+        }).always(function () {
             reloadUi();
         });
     })
