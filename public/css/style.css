@@ -38,6 +38,12 @@ header p {
     margin-bottom: 2rem;
 }
 
+.list_to_do h4 {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+}
+
 .btn-success {
     background-color: #7fd81e;
     border-color: #7fd81e;
