@@ -39,7 +39,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     navigator.serviceWorker.register('sw.js')
         .then(function (swReg) {
             serviceWorkerEnabled = true;
-            console.log('Service Worker is registered', swReg);
+            console.log('Service Worker is registered');
             swRegistration = swReg;
             initialiseUi();
         })
@@ -116,7 +116,6 @@ function reloadUi() {
 
 function initialiseUi() {
     button.on('click', function (e) {
-        button.attr('disabled', true);
         if (isSubscribed) {
             unsubscribeUser();
         } else {
@@ -133,12 +132,30 @@ function initialiseUi() {
 }
 
 function subscribeUser() {
+    $('.js--chose-region').removeClass('is-invalid');
+    $('.js--error').html('');
+    button.attr('disabled', true);
+
     const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+    var currentData = getCurrentData();
+
+    if(jQuery.isEmptyObject(currentData)) {
+        $('.js--chose-region').addClass('is-invalid');
+        $('.js--error').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+            '  Please choose a region' +
+            '  <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
+            '    <span aria-hidden="true">&times;</span>\n' +
+            '  </button>\n' +
+            '</div>');
+        button.removeAttr('disabled');
+        return;
+    }
+
     swRegistration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: applicationServerKey
     }).then(function (subscription) {
-        $.post('/ajax/register', {subscription: subscription.toJSON(), subTo: getCurrentData()}).done(function (data) {
+        $.post('/ajax/register', {subscription: subscription.toJSON(), subTo: currentData}).done(function (data) {
             isSubscribed = true;
             reloadUi();
         });
@@ -155,7 +172,6 @@ function unsubscribeUser() {
         if (subscription) {
             $.post('/ajax/register', {subscription: subscription.toJSON(), unsubscribe: true})
                 .always(function () {
-                    console.log('User is unsubscribed.');
                     isSubscribed = false;
                     reloadUi();
 
