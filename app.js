@@ -12,14 +12,18 @@ webpush.setVapidDetails(
 
 const q = 'notification';
 
-open.then(function(conn) {
+const options = {
+    TTL: 172800 // 2 days
+};
+
+open.then(function (conn) {
     return conn.createChannel();
-}).then(function(ch) {
-    return ch.assertQueue(q).then(function(ok) {
-        return ch.consume(q, function(msg) {
+}).then(function (ch) {
+    return ch.assertQueue(q).then(function (ok) {
+        return ch.consume(q, function (msg) {
             if (msg !== null) {
                 var messageBroker = JSON.parse(msg.content.toString());
-                webpush.sendNotification(messageBroker.pushInfo, JSON.stringify(messageBroker.message));
+                webpush.sendNotification(messageBroker.pushInfo, JSON.stringify(messageBroker.message), options);
                 console.log(msg.content.toString());
                 ch.ack(msg);
             }
