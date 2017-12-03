@@ -53,4 +53,45 @@ SQL;
         $stmt = PDO::getInstance()->prepare($sql);
         $stmt->execute($params);
     }
+
+    public function ajaxGetCurrentSubscription(Request $request, Response $response)
+    {
+        $subscription = $request->getParam('subscription');
+
+        if (empty($subscription)) {
+            return $response->withStatus(400);
+        }
+
+        $subscriber = PDO::getInstance()
+            ->select(['subscribed_to'])
+            ->from('subscribers')
+            ->where('google_json', '=', \json_encode($subscription))
+            ->execute()
+            ->fetch();
+
+        if(empty($subscriber)) {
+            return $response->withStatus(404);
+        }
+
+        $regions = [];
+        $howMuch = 0;
+
+        $subscribedTo = json_decode($subscriber['subscribed_to'], true);
+
+        if(empty($subscribedTo) || !is_array($subscribedTo)) {
+            return $response->withStatus(400);
+        }
+
+        foreach($subscribedTo as $region => $number) {
+            if(in_array($region, ['eu', 'us', 'tw', 'kr', 'world'])) {
+                $regions[] = $region;
+                $howMuch = $number;
+            }
+        }
+
+        return $response->withJson([
+            'regions' => $regions,
+            'howMuch' => $howMuch,
+        ]);
+    }
 }

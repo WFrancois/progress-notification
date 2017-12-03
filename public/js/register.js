@@ -1,8 +1,8 @@
 /** Activate region */
-$('.js--checkbox-active').on('click', function(e) {
+$('.js--checkbox-active').on('click', function (e) {
     var idActivate = $(this).data('target');
 
-    if($(this).is(':checked')) {
+    if ($(this).is(':checked')) {
         $('#' + idActivate).show();
     } else {
         $('#' + idActivate).hide();
@@ -14,8 +14,8 @@ function getCurrentData() {
 
     var howMany = parseInt($('.js--how-many-guilds').val());
 
-    $('.js--chose-region').each(function(i, item) {
-        if($(item).is(':checked')) {
+    $('.js--chose-region').each(function (i, item) {
+        if ($(item).is(':checked')) {
             var region = $(item).data('region');
             data[region] = howMany;
         }
@@ -28,9 +28,9 @@ function getCurrentData() {
 var swRegistration = null;
 var serviceWorkerEnabled = false;
 var isSubscribed = false;
+var untouchForm = true;
 
 var button = $('.js--submit-button');
-console.log(button);
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
@@ -53,6 +53,45 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     serviceWorkerEnabled = 'Push messaging is not supported';
     reloadUi();
 }
+
+$('.js--input-option').on('change', function(e) {
+    untouchForm = false;
+});
+
+$(document).ready(function () {
+    // Set the initial subscription value
+    swRegistration.pushManager.getSubscription().then(function (subscription) {
+        if (!subscription) {
+            isSubscribed = false;
+            return;
+        }
+
+        $.post('/ajax/current-subscription', {subscription: subscription.toJSON()}, function (data) {
+            if (!data.regions || !data.howMuch) {
+                isSubscribed = false;
+                return;
+            }
+
+            isSubscribed = true;
+
+            if(!untouchForm) {
+                return;
+            }
+
+            $('.js--chose-region').each(function (i, item) {
+                var region = $(item).data('region');
+
+                if (data.regions.indexOf(region) !== -1) {
+                    $(item).prop('checked', true);
+                }
+            });
+
+            $('.js--how-many-guilds').val(data.howMuch);
+        }, 'json').always(function () {
+            reloadUi();
+        });
+    })
+});
 
 function reloadUi() {
     if (serviceWorkerEnabled !== true) {
@@ -99,36 +138,33 @@ function subscribeUser() {
         userVisibleOnly: true,
         applicationServerKey: applicationServerKey
     }).then(function (subscription) {
-        console.log(subscription);
-        $.post('/ajax/register', {subscription: subscription.toJSON(), subTo: getCurrentData()}).done(function(data) {
+        $.post('/ajax/register', {subscription: subscription.toJSON(), subTo: getCurrentData()}).done(function (data) {
             isSubscribed = true;
             reloadUi();
         });
     }).catch(function (err) {
-        console.log('Failed to subscribe the user: ', err);
+        console.warn('Failed to subscribe the user: ', err);
         serviceWorkerEnabled = 'Failed to subscribe the user';
         reloadUi();
     });
 }
 
 function unsubscribeUser() {
-    swRegistration.pushManager.getSubscription()
-        .then(function (subscription) {
-            if (subscription) {
-                $.post('/ajax/register', {subscription: subscription.toJSON(), unsubscribe: true})
-                    .always(function () {
-                        return subscription.unsubscribe();
-                    });
-            }
-        })
-        .catch(function (error) {
-            console.log('Error unsubscribing', error);
-        })
-        .then(function () {
-            console.log('User is unsubscribed.');
-            isSubscribed = false;
-            reloadUi();
-        });
+    button.attr('disabled', true);
+    swRegistration.pushManager.getSubscription().then(function (subscription) {
+        if (subscription) {
+            $.post('/ajax/register', {subscription: subscription.toJSON(), unsubscribe: true})
+                .always(function () {
+                    console.log('User is unsubscribed.');
+                    isSubscribed = false;
+                    reloadUi();
+
+                    return subscription.unsubscribe();
+                });
+        }
+    }).catch(function (error) {
+        console.log('Error unsubscribing', error);
+    });
 }
 
 function urlB64ToUint8Array(base64String) {

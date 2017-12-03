@@ -13,7 +13,7 @@
                     {% for key, label in region %}
                         <li>
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input js--chose-region" data-region="{{ key }}">
+                                <input type="checkbox" {% if key == 'world' %}checked{% endif %} class="js--input-option custom-control-input js--chose-region" data-region="{{ key }}">
                                 <span class="custom-control-indicator"></span>
                                 <span class="custom-control-description">{{ label }}</span>
                             </label>
@@ -29,7 +29,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-11 offset-1">
-                    <select class="custom-select col-1 js--how-many-guilds" title="Chose how many guilds you want alert for">
+                    <select class="js--input-option custom-select col-1 js--how-many-guilds" title="Chose how many guilds you want alert for">
                         <option value="3">3 guilds</option>
                         <option value="5">5 guilds</option>
                         <option value="10">10 guilds</option>
