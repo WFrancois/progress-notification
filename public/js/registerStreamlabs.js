@@ -48,7 +48,7 @@ function subscribeUser() {
     }
 
 
-    $.post('/ajax/stream/register', {subTo: currentData, image: $('.js--image').val(), sound: $('.js--sound').val()}).done(function (data) {
+    $.post('/ajax/stream/register', {subTo: currentData, type: $('.js--streamlabs-type').val(), sound: $('.js--sound').val()}).done(function (data) {
         isSubscribed = true;
         reloadUi();
     });

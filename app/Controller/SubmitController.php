@@ -21,7 +21,7 @@ class SubmitController extends BaseController
         $rawPayload = file_get_contents("php://input");
         $sign = hash_hmac('md5', $rawPayload, Config::getInstance()->get('access_token'));
 
-        if($request->getHeader('HTTP_X_RAIDERIO_SIGNATURE')[0] !== $sign) {
+        if ($request->getHeader('HTTP_X_RAIDERIO_SIGNATURE')[0] !== $sign) {
             return $response->withJson(['error' => 'incorrect-access-token'])->withStatus(401);
         }
 
@@ -60,17 +60,17 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-boss-id'])->withStatus(400);
         }
 
-        if(empty($this->payload['guildProfileUrl'])) {
+        if (empty($this->payload['guildProfileUrl'])) {
             Log::add('missing-url', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'missing-url'])->withStatus(400);
         }
 
-        if(empty($this->payload['region']['slug'])) {
+        if (empty($this->payload['region']['slug'])) {
             Log::add('missing-region', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
-        if(empty($this->payload['region']['shortName'])) {
+        if (empty($this->payload['region']['shortName'])) {
             Log::add('missing-region-name', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'missing-region-short-name'])->withStatus(400);
         }
@@ -82,19 +82,18 @@ class SubmitController extends BaseController
         $region = $this->payload['region']['slug'];
 
         $bossName = Util::getBossName($bossId);
-        if(!empty($this->payload['boss']['name'])) {
+        if (!empty($this->payload['boss']['name'])) {
             $bossName = $this->payload['boss']['name'];
         }
 
-        $message = $guildName . ' killed ' . $bossName .
-            ' World ' . Util::getOrdinal($rankWorld) . ', ' . $this->payload['region']['shortName'] . ' ' . Util::getOrdinal($rankRegion);
 
-
-        $this->sendPushApi($rankWorld, $rankRegion, $region, $bossId, $this->payload['guildProfileUrl'], $message);
+        $this->sendPushApi($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
+        $this->sendStreamlabs($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
     }
 
-    private function sendPushApi($rankWorld, $rankRegion, $region, $bossId, $guildUrl, $message)
+    private function sendPushApi($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
     {
+        $message = $guildName . ' killed ' . $bossName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
         $time = microtime(true);
 
         $query = 'SELECT * FROM subscribers WHERE ';
@@ -136,5 +135,46 @@ class SubmitController extends BaseController
         $connection->close();
 
         Log::add('sent-push-api', ['payload' => $this->payload, 'time' => microtime(true) - $time]);
+    }
+
+    private function sendStreamlabs($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
+    {
+        $message = $bossName . ' has been killed by ' . $guildName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
+        $time = microtime(true);
+
+        $query = 'SELECT * FROM streamlabs WHERE ';
+
+        $queryWhere[] = 'CAST(streamlabs.subscribed_to->>\'world\' as int) >= ' .
+            $rankWorld;
+        $queryWhere[] = 'CAST(streamlabs.subscribed_to->>\'' . $region . '\' as int) >= ' .
+            $rankRegion;
+
+        $stmt = PDO::getInstance()->query($query . implode(' OR ', $queryWhere));
+        $stmt->execute();
+        $subscribers = $stmt->fetchAll();
+
+        $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+        $channel = $connection->channel();
+        $channel->queue_declare('streamlabs', false, true, false, false);
+        $channel->exchange_declare('router_streamlabs', 'direct', false, true, false);
+        $channel->queue_bind('streamlabs', 'router_streamlabs');
+
+        Log::add('send-notification', ['payload' => $this->payload, 'subscriber' => count($subscribers)]);
+        foreach ($subscribers as $subscriber) {
+            $options = \json_decode($subscriber['options'], true);
+            $messageBroker = [
+                'pushInfo' => $subscriber['twitch_id'],
+                'message' => $message,
+                'image' => 'https://prograce.info/img/' . $bossId . '_screen.jpg',
+                'sound' => $options['sound'] ?? '',
+                'type' => $options['type'] ?? 'follow'
+            ];
+            $message = new AMQPMessage(\json_encode($messageBroker));
+            $channel->batch_basic_publish($message, 'router_streamlabs');
+        }
+
+        $channel->publish_batch();
+        $channel->close();
+        $connection->close();
     }
 }

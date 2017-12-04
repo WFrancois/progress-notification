@@ -62,10 +62,10 @@ class StreamlabController extends BaseController
         }
 
         $sql = <<<SQL
-INSERT INTO streamlabs(twitch_id, access_token, refresh_token, token_type, expires_in) 
-VALUES(:twitch_id, :access_token, :refresh_token, :token_type, :expires_in) 
+INSERT INTO streamlabs(twitch_id, access_token, refresh_token, token_type, expires_in, created_at) 
+VALUES(:twitch_id, :access_token, :refresh_token, :token_type, :expires_in, NOW()) 
 ON CONFLICT (twitch_id) 
-DO UPDATE SET access_token = :access_token, refresh_token = :refresh_token, token_type = :token_type, expires_in = :expires_in;
+DO UPDATE SET access_token = :access_token, refresh_token = :refresh_token, token_type = :token_type, expires_in = :expires_in, created_at = NOW();;
 SQL;
 
 
@@ -109,7 +109,7 @@ SQL;
             'subscribedTo' => $subscribedTo,
             'regions' => $regions,
             'howMuch' => $howMuch,
-            'image' => $options['image'] ?? '',
+            'type' => $options['type'] ?? '',
             'sound' => $options['sound'] ?? '',
         ]);
     }
@@ -138,11 +138,11 @@ SQL;
             }
 
             $sound = $request->getParam('sound');
-            $image = $request->getParam('image');
+            $type = $request->getParam('type');
 
             $options = [];
-            if(!empty($image)) {
-                $options['image'] = $image;
+            if(!empty($type)) {
+                $options['type'] = $type;
             }
             if(!empty($sound)) {
                 $options['sound'] = $sound;
