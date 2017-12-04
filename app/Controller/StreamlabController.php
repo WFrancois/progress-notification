@@ -62,10 +62,10 @@ class StreamlabController extends BaseController
         }
 
         $sql = <<<SQL
-INSERT INTO streamlabs(twitch_id, access_token, refresh_token, token_type, expires_in, created_at) 
-VALUES(:twitch_id, :access_token, :refresh_token, :token_type, :expires_in, NOW()) 
+INSERT INTO streamlabs(twitch_id, access_token, refresh_token, token_type, expires_in, created_at, username) 
+VALUES(:twitch_id, :access_token, :refresh_token, :token_type, :expires_in, NOW(), :username) 
 ON CONFLICT (twitch_id) 
-DO UPDATE SET access_token = :access_token, refresh_token = :refresh_token, token_type = :token_type, expires_in = :expires_in, created_at = NOW();;
+DO UPDATE SET access_token = :access_token, refresh_token = :refresh_token, token_type = :token_type, expires_in = :expires_in, username = :username, created_at = NOW();
 SQL;
 
 
