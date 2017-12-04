@@ -72,6 +72,7 @@ SQL;
         $stmt = PDO::getInstance()->prepare($sql);
         $stmt->execute([
             'twitch_id' => $userInfo['twitch']['id'],
+            'username' => $userInfo['twitch']['name'],
             'access_token' => $tokenInfo['access_token'],
             'refresh_token' => $tokenInfo['refresh_token'],
             'token_type' => $tokenInfo['token_type'],

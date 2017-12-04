@@ -176,5 +176,6 @@ class SubmitController extends BaseController
         $channel->publish_batch();
         $channel->close();
         $connection->close();
+        Log::add('sent-streamlabs', ['payload' => $this->payload, 'time' => microtime(true) - $time]);
     }
 }
