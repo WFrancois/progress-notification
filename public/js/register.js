@@ -79,9 +79,7 @@ $(document).ready(function () {
             $('.js--chose-region').each(function (i, item) {
                 var region = $(item).data('region');
 
-                if (data.regions.indexOf(region) !== -1) {
-                    $(item).prop('checked', true);
-                }
+                $(item).prop('checked', data.regions.indexOf(region) !== -1);
             });
 
             $('.js--how-many-guilds').val(data.howMuch);
