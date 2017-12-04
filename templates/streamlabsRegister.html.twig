@@ -13,9 +13,7 @@
                     {% for key, label in region %}
                         <li>
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" {% if key == 'world' %}checked{% endif %}
-                                       class="js--input-option custom-control-input js--chose-region"
-                                       data-region="{{ key }}">
+                                <input type="checkbox" {% if (subscribedTo is not empty and attribute(subscribedTo, key) is not empty) or (subscribedTo is empty and key == 'world') %}checked{% endif %} class="js--input-option custom-control-input js--chose-region" data-region="{{ key }}">
                                 <span class="custom-control-indicator"></span>
                                 <span class="custom-control-description">{{ label }}</span>
                             </label>
@@ -31,12 +29,12 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
-                    <select class="js--input-option custom-select col-1 js--how-many-guilds"
-                            title="Chose how many guilds you want alert for">
-                        <option value="3">3 guilds</option>
-                        <option value="5">5 guilds</option>
-                        <option value="10">10 guilds</option>
-                        <option value="20">20 guilds</option>
+                    <select class="js--input-option custom-select col-1 js--how-many-guilds" title="Chose how many guilds you want alert for">
+                        <option value="3" {% if howMuch == 1 %}selected{% endif %}>1 guild</option>
+                        <option value="3" {% if howMuch == 3 %}selected{% endif %}>3 guilds</option>
+                        <option value="5" {% if howMuch == 5 %}selected{% endif %}>5 guilds</option>
+                        <option value="10" {% if howMuch == 10 %}selected{% endif %}>10 guilds</option>
+                        <option value="20" {% if howMuch == 20 %}selected{% endif %}>20 guilds</option>
                     </select>
                 </div>
             </div>
@@ -45,9 +43,15 @@
             <div class="row justify-content-center">
                 <h1 class="col-1">3</h1>
                 <h4 class="col-xl-6 col-lg-8 col-sm-11">
-                    <button class="btn btn-success btn-block js--submit-button" disabled>
-                        Subscribe
-                    </button>
+                    {% if subscribedTo is empty %}
+                        <button class="btn btn-success btn-block js--submit-button" data-default-subscribed="false">
+                            Subscribe to alert from streamlabs
+                        </button>
+                    {% else %}
+                        <button class="btn btn-warning btn-block js--submit-button" data-default-subscribed="true">
+                            Unsubscribe to alert from streamlabs
+                        </button>
+                    {% endif %}
                 </h4>
             </div>
             <div class="row justify-content-center">
@@ -57,17 +61,10 @@
         </div>
     </div>
     <p style="text-align:center;">
-        <a class="text-light"
-           href="https://streamlabs.com/api/v1.0/authorize?response_type=code&client_id={{ streamlabsClient }}&redirect_uri={{ streamlabsRedirect }}&scope=alerts.create">Get
-            alert from streamlabs instead</a>
+        <a class="text-light" href="/">Get alert from the browser instead</a>
     </p>
-    <div style="margin: auto;">
-    </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="application/javascript">
-        const applicationServerPublicKey = '{{ application_public_key }}';
-    </script>
-    <script type="application/javascript" src="/js/register.js"></script>
+    <script type="application/javascript" src="/js/registerStreamlabs.js"></script>
 {% endblock %}

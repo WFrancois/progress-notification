@@ -3,7 +3,9 @@
 
 $app->get('/', \ProgressNotification\Controller\RegisterController::class . ':registerAction')->setName('homePage');
 
-$app->get('/stream', \ProgressNotification\Controller\RegisterController::class . ':registerAction')->setName('streamPage');
+$app->get('/stream/register', \ProgressNotification\Controller\StreamlabController::class . ':streamRegisterAction')->setName('streamRegisterPage');
+
+$app->post('/ajax/stream/register', \ProgressNotification\Controller\StreamlabController::class . ':ajaxRegisterAction')->setName('AjaxstreamRegisterPage');
 
 $app->get('/stream/declined', \ProgressNotification\Controller\StreamlabController::class . ':errorOauth')->setName('streamErrorPage');
 

@@ -7,6 +7,7 @@ use Curl\Curl;
 use ProgressNotification\Service\Config;
 use ProgressNotification\Service\Log;
 use ProgressNotification\Service\PDO;
+use ProgressNotification\Service\Util;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -78,5 +79,64 @@ SQL;
         ]);
 
         $_SESSION['twitch_id'] = $userInfo['twitch']['id'];
+
+        return $response->withHeader('Location', $this->container->router->pathFor('streamRegisterPage'));
+    }
+
+    public function streamRegisterAction(Request $request, Response $response)
+    {
+        $streamlab = PDO::getInstance()->select([])->from('streamlabs')->execute()->fetch();
+
+        if (empty($streamlab)) {
+            return $response->withHeader('Location', $this->container->router->pathFor('streamErrorPage'));
+        }
+
+        $subscribedTo = \json_decode($streamlab['subscribed_to'], true);
+
+        $regions = [];
+        $howMuch = null;
+        if(!empty($subscribedTo) && is_array($subscribedTo)) {
+            foreach($subscribedTo as $region => $number) {
+                if(in_array($region, ['eu', 'us', 'tw', 'kr', 'world'])) {
+                    $regions[] = $region;
+                    $howMuch = $number;
+                }
+            }
+        }
+
+        return $this->view->render($response, 'streamlabsRegister.html.twig', [
+            'subscribedTo' => $subscribedTo,
+            'regions' => $regions,
+            'howMuch' => $howMuch,
+        ]);
+    }
+
+    public function ajaxRegisterAction(Request $request, Response $response)
+    {
+        if (empty($_SESSION['twitch_id'])) {
+            return $response->withStatus(400);
+        }
+
+        $unRegister = $request->getParam('unsubscribe');
+
+        if ($unRegister === 'true') {
+            $stmt = PDO::getInstance()->update(['subscribed_to' => null]);
+
+        } else {
+            $subTo = $request->getParam('subTo');
+            $subscribed_to = ['world' => 3];
+            if (is_array($subTo)) {
+                $subscribed_to = [];
+                foreach ($subTo as $region => $number) {
+                    if (!empty(Util::REGION[$region]) && $number > 0 && $number <= 20) {
+                        $subscribed_to[$region] = (int)$number;
+                    }
+                }
+            }
+
+            $stmt = PDO::getInstance()->update(['subscribed_to' => \json_encode($subscribed_to)]);
+        }
+
+        $stmt->table('streamlabs')->where('twitch_id', '=', $_SESSION['twitch_id'])->execute();
     }
 }
