@@ -15,6 +15,8 @@ class RegisterController extends BaseController
     {
         return $this->view->render($response, 'register.html.twig', [
             'application_public_key' => Config::getInstance()->get('webPush')['publicKey'] ?? '',
+            'streamlabsRedirect' => Config::getInstance()->get('streamlabs')['redirect'] ?? '',
+            'streamlabsClient' => Config::getInstance()->get('streamlabs')['clientId'] ?? '',
         ]);
     }
 

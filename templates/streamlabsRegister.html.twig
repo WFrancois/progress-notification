@@ -1,0 +1,99 @@
+{% extends 'components/base.html.twig' %}
+
+{% block content %}
+    <div class="rounded border border-dark form-group js--div-advanced" style="margin: 1rem 0;">
+        <div class="chose_region list_to_do">
+            <div class="row justify-content-center">
+                <h1 class="col-1">1</h1>
+                <h4 class="col-xl-6 col-lg-8 col-sm-11">Choose your region(s):</h4>
+            </div>
+            <div class="row justify-content-center">
+                <ul class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
+                    {% set region = {'world': 'World', 'eu': 'Europe', 'us': 'US / OC', 'kr': 'Korea', 'tw': 'Taiwan'} %}
+                    {% for key, label in region %}
+                        <li>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" {% if (subscribedTo is not empty and attribute(subscribedTo, key) is not empty) or (subscribedTo is empty and key == 'world') %}checked{% endif %} class="js--input-option custom-control-input js--chose-region" data-region="{{ key }}">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">{{ label }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="chose_how_much list_to_do">
+            <div class="row justify-content-center">
+                <h1 class="col-1">2</h1>
+                <h4 class="col-xl-6 col-lg-8 col-sm-11">How many guilds do you want alerts for ?</h4>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
+                    <select class="js--input-option custom-select col-1 js--how-many-guilds" title="Chose how many guilds you want alert for">
+                        <option value="3" {% if howMuch == 1 %}selected{% endif %}>1 guild</option>
+                        <option value="3" {% if howMuch == 3 %}selected{% endif %}>3 guilds</option>
+                        <option value="5" {% if howMuch == 5 %}selected{% endif %}>5 guilds</option>
+                        <option value="10" {% if howMuch == 10 %}selected{% endif %}>10 guilds</option>
+                        <option value="20" {% if howMuch == 20 %}selected{% endif %}>20 guilds</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="options list_to_do">
+            <div class="row justify-content-center">
+                <h1 class="col-1">3</h1>
+                <h4 class="col-xl-6 col-lg-8 col-sm-11">What alert's type will it be ?</h4>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
+                    <select class="js--input-option custom-select col-1 js--streamlabs-type" title="What type will it be ?">
+                        {#follow, subscription, donation, or host#}
+                        <option value="follow" {% if type == "follow" %}selected{% endif %}>Follow</option>
+                        <option value="Subscription" {% if type == "Subscription" %}selected{% endif %}>Subscription</option>
+                        <option value="donation" {% if type == "donation" %}selected{% endif %}>Donation</option>
+                        <option value="host" {% if type == "host" %}selected{% endif %}>Host</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="options list_to_do">
+            <div class="row justify-content-center">
+                <h1 class="col-1">4</h1>
+                <h4 class="col-xl-6 col-lg-8 col-sm-11">Customize the sound (optionnal) ?</h4>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
+                    <input type="text" class="form-control js--sound" value="{{ sound }}" title="Image Link" placeholder="Sound Link (http://image.mp3)" />
+                </div>
+            </div>
+        </div>
+        <div class="subscribe_button list_to_do">
+            <div class="row justify-content-center">
+                <h1 class="col-1">5</h1>
+                <h4 class="col-xl-6 col-lg-8 col-sm-11">
+                    {% if subscribedTo is empty %}
+                        <button class="btn btn-success btn-block js--submit-button" data-default-subscribed="false">
+                            Subscribe to alert from streamlabs
+                        </button>
+                    {% else %}
+                        <button class="btn btn-warning btn-block js--submit-button" data-default-subscribed="true">
+                            Unsubscribe to alert from streamlabs
+                        </button>
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1 js--error">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="text-align:center;">
+        <a class="text-light" href="/">Get alert from the browser instead</a>
+    </p>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript" src="/js/registerStreamlabs.js"></script>
+{% endblock %}

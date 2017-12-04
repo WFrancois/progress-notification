@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "amqplib": "^0.5.2",
+    "pg": "^7.4.0",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
     "web-push": "^3.2.4"
   }
 }

@@ -15,8 +15,12 @@ class BaseController
     /** @var Router */
     protected $router;
 
+    /** @var  Container */
+    protected $container;
+
     public function __construct(Container $container)
     {
+        $this->container = $container;
         $this->view = $container->view;
         $this->router = $container->router;
     }

@@ -1,14 +1,3 @@
-/** Activate region */
-$('.js--checkbox-active').on('click', function (e) {
-    var idActivate = $(this).data('target');
-
-    if ($(this).is(':checked')) {
-        $('#' + idActivate).show();
-    } else {
-        $('#' + idActivate).hide();
-    }
-});
-
 function getCurrentData() {
     var data = {};
 
