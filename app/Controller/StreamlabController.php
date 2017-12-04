@@ -92,6 +92,7 @@ SQL;
         }
 
         $subscribedTo = \json_decode($streamlab['subscribed_to'], true);
+        $options = \json_decode($streamlab['options'], true);
 
         $regions = [];
         $howMuch = null;
@@ -108,6 +109,8 @@ SQL;
             'subscribedTo' => $subscribedTo,
             'regions' => $regions,
             'howMuch' => $howMuch,
+            'image' => $options['image'] ?? '',
+            'sound' => $options['sound'] ?? '',
         ]);
     }
 
@@ -120,7 +123,7 @@ SQL;
         $unRegister = $request->getParam('unsubscribe');
 
         if ($unRegister === 'true') {
-            $stmt = PDO::getInstance()->update(['subscribed_to' => null]);
+            $stmt = PDO::getInstance()->update(['subscribed_to' => null, 'options' => null]);
 
         } else {
             $subTo = $request->getParam('subTo');
@@ -134,7 +137,18 @@ SQL;
                 }
             }
 
-            $stmt = PDO::getInstance()->update(['subscribed_to' => \json_encode($subscribed_to)]);
+            $sound = $request->getParam('sound');
+            $image = $request->getParam('image');
+
+            $options = [];
+            if(!empty($image)) {
+                $options['image'] = $image;
+            }
+            if(!empty($sound)) {
+                $options['sound'] = $sound;
+            }
+
+            $stmt = PDO::getInstance()->update(['subscribed_to' => \json_encode($subscribed_to), 'options' => \json_encode($options)]);
         }
 
         $stmt->table('streamlabs')->where('twitch_id', '=', $_SESSION['twitch_id'])->execute();
