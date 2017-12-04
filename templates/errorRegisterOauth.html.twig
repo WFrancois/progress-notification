@@ -1,0 +1,17 @@
+{% extends 'components/base.html.twig' %}
+
+{% block content %}
+    <div class="form-group" style="margin: 1rem 0;">
+        <div class="row justify-content-center">
+            <h5 class="text-danger">An error has occured when trying to connect with
+                streamlabs.
+                <hr/>
+                <a href="https://streamlabs.com/api/v1.0/authorize?response_type=code&client_id={{ streamlabsClient }}&redirect_uri={{ streamlabsRedirect }}&scope=alerts.create"
+                   class="text-warning">Try again</a>
+            </h5>
+        </div>
+    </div>
+    <p>
+
+    </p>
+{% endblock %}
