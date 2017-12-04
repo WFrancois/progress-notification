@@ -50,7 +50,7 @@
                     <select class="js--input-option custom-select col-1 js--streamlabs-type" title="What type will it be ?">
                         {#follow, subscription, donation, or host#}
                         <option value="follow" {% if type == "follow" %}selected{% endif %}>Follow</option>
-                        <option value="Subscription" {% if type == "Subscription" %}selected{% endif %}>Subscription</option>
+                        <option value="subscription" {% if type == "subscription" %}selected{% endif %}>Subscription</option>
                         <option value="donation" {% if type == "donation" %}selected{% endif %}>Donation</option>
                         <option value="host" {% if type == "host" %}selected{% endif %}>Host</option>
                     </select>

@@ -93,7 +93,7 @@ class SubmitController extends BaseController
 
     private function sendPushApi($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
     {
-        $message = $guildName . ' killed ' . $bossName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
+        $messageText = $guildName . ' killed ' . $bossName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
         $time = microtime(true);
 
         $query = 'SELECT * FROM subscribers WHERE ';
@@ -109,7 +109,7 @@ class SubmitController extends BaseController
 
         $data = [
             'title' => 'Raid Progress Update!',
-            'text' => $message,
+            'text' => $messageText,
             'icon' => '/img/' . $bossId . '.jpg',
             'url' => $guildUrl,
         ];
@@ -139,7 +139,7 @@ class SubmitController extends BaseController
 
     private function sendStreamlabs($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
     {
-        $message = $bossName . ' has been killed by ' . $guildName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
+        $messageText = $bossName . ' has been killed by ' . $guildName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
         $time = microtime(true);
 
         $query = 'SELECT * FROM streamlabs WHERE ';
@@ -164,7 +164,7 @@ class SubmitController extends BaseController
             $options = \json_decode($subscriber['options'], true);
             $messageBroker = [
                 'pushInfo' => $subscriber['twitch_id'],
-                'message' => $message,
+                'message' => $messageText,
                 'image' => 'https://prograce.info/img/' . $bossId . '_screen.jpg',
                 'sound' => $options['sound'] ?? '',
                 'type' => $options['type'] ?? 'follow'

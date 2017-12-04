@@ -76,7 +76,8 @@ async function sendNotification(twitchId, message, type, image, sound) {
                 }
             };
 
-            await http(options);
+            let result = await http(options);
+            console.log(result);
         }
     } catch(error) {
         console.warn(error.error);
