@@ -10,7 +10,7 @@ $container = $app->getContainer();
 
 $container['view'] = function ($c) {
     $view = new \Slim\Views\Twig(__DIR__ . '/../templates', [
-        'cache' => false
+        'cache' => \ProgressNotification\Service\Config::getInstance()->get('cache', false),
     ]);
 
     // Instantiate and add Slim specific extension
