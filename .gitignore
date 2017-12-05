@@ -2,3 +2,4 @@
 .idea/
 src/config.json
 /node_modules/
+/cache/
