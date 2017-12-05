@@ -120,7 +120,7 @@ class SubmitController extends BaseController
         $channel->exchange_declare('router', 'direct', false, true, false);
         $channel->queue_bind('notification', 'router');
 
-        Log::add('send-notification', ['payload' => $this->payload, 'subscriber' => count($subscribers)]);
+        Log::add('send-notification-push', ['payload' => $this->payload, 'subscriber' => count($subscribers)]);
         foreach ($subscribers as $subscriber) {
             $messageBroker = [
                 'pushInfo' => \json_decode($subscriber['google_json'], true),
@@ -159,7 +159,7 @@ class SubmitController extends BaseController
         $channel->exchange_declare('router_streamlabs', 'direct', false, true, false);
         $channel->queue_bind('streamlabs', 'router_streamlabs');
 
-        Log::add('send-notification', ['payload' => $this->payload, 'subscriber' => count($subscribers)]);
+        Log::add('send-notification-streamlab', ['payload' => $this->payload, 'subscriber' => count($subscribers)]);
         foreach ($subscribers as $subscriber) {
             $options = \json_decode($subscriber['options'], true);
             $messageBroker = [
