@@ -1,5 +1,11 @@
 <?php
 
+
+$config = \json_decode(file_get_contents(__DIR__ . '/config.json'), true);
+$config = new \ProgressNotification\Service\Config($config);
+
+new \ProgressNotification\Service\PDO($config->get('pdo'));
+
 $container = $app->getContainer();
 
 $container['view'] = function ($c) {
@@ -13,11 +19,7 @@ $container['view'] = function ($c) {
 
     $view->getEnvironment()->addGlobal('session', $_SESSION);
     $view->getEnvironment()->addGlobal('currentUrl', $c['request']->getUri()->getPath());
+    $view->getEnvironment()->addGlobal('ASSET_VERSION', ASSET_VERSION);
 
     return $view;
 };
-
-$config = \json_decode(file_get_contents(__DIR__ . '/config.json'), true);
-$config = new \ProgressNotification\Service\Config($config);
-
-new \ProgressNotification\Service\PDO($config->get('pdo'));

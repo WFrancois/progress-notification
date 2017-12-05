@@ -1,4 +1,7 @@
 <?php
+
+define('ASSET_VERSION', 1);
+
 return [
     'settings' => [
         'displayErrorDetails' => true, // set to false in production

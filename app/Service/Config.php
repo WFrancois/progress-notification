@@ -21,7 +21,8 @@ class Config
         return self::$instance;
     }
 
-    public function get(string $access) {
-        return $this->config[$access] ?? null;
+    public function get(string $access, $default = null)
+    {
+        return $this->config[$access] ?? $default;
     }
 }
