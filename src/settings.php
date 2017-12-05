@@ -1,6 +1,6 @@
 <?php
 
-define('ASSET_VERSION', 1);
+define('ASSET_VERSION', 2);
 
 return [
     'settings' => [

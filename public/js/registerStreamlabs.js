@@ -14,7 +14,41 @@ function getCurrentData() {
 }
 
 const button = $('.js--submit-button');
+const buttonTestNotification = $('.js--send-test-notification');
+const errorSendingTest = $('.js--error-test-notification');
+
 var isSubscribed = button.data('defaultSubscribed');
+
+function reloadUi() {
+    button.removeAttr('disabled');
+    if (isSubscribed) {
+        button.text('Unsubscribe to alert from streamlabs');
+        button.addClass('btn-warning');
+        button.removeClass('btn-success');
+        buttonTestNotification.show();
+    } else {
+        button.text('Subscribe to alert from streamlabs');
+        button.removeClass('btn-warning');
+        button.addClass('btn-success');
+        buttonTestNotification.hide();
+    }
+}
+
+reloadUi();
+
+buttonTestNotification.on('click', function(e) {
+    e.preventDefault();
+
+    errorSendingTest.hide();
+    buttonTestNotification.attr('disabled', true);
+
+    $.post('/streamlabs/test').then(function(e) {
+    }).catch(function(e) {
+        errorSendingTest.show();
+    }).always(function() {
+        buttonTestNotification.removeAttr('disabled');
+    })
+});
 
 button.on('click', function(e) {
     e.preventDefault();
@@ -59,19 +93,4 @@ function unsubscribeUser() {
         isSubscribed = false;
         reloadUi();
     });
-}
-
-
-
-function reloadUi() {
-    button.removeAttr('disabled');
-    if (isSubscribed) {
-        button.text('Unsubscribe to alert from streamlabs');
-        button.addClass('btn-warning');
-        button.removeClass('btn-success');
-    } else {
-        button.text('Subscribe to alert from streamlabs');
-        button.removeClass('btn-warning');
-        button.addClass('btn-success');
-    }
 }

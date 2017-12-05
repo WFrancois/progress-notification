@@ -11,6 +11,8 @@ $app->get('/stream/declined', \ProgressNotification\Controller\StreamlabControll
 
 $app->get('/streamlabs/oauth', \ProgressNotification\Controller\StreamlabController::class . ':confirmCode')->setName('streamlabsRedirect');
 
+$app->post('/streamlabs/test', \ProgressNotification\Controller\StreamlabController::class . ':sendTest')->setName('sendTestPage');
+
 $app->post('/ajax/register', \ProgressNotification\Controller\RegisterController::class . ':ajaxRegister')->setName('registerAjax');
 
 $app->post('/ajax/current-subscription', \ProgressNotification\Controller\RegisterController::class . ':ajaxGetCurrentSubscription')->setName('ajaxGetCurrentSubscription');

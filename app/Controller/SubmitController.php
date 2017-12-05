@@ -139,7 +139,7 @@ class SubmitController extends BaseController
 
     private function sendStreamlabs($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
     {
-        $messageText = $bossName . ' has been killed by ' . $guildName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
+        $messageText = $bossName . ' has been killed by ' . $guildName . ': World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
         $time = microtime(true);
 
         $query = 'SELECT * FROM streamlabs WHERE ';

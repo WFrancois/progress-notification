@@ -13,7 +13,10 @@
                     {% for key, label in region %}
                         <li>
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" {% if (subscribedTo is not empty and attribute(subscribedTo, key) is not empty) or (subscribedTo is empty and key == 'world') %}checked{% endif %} class="js--input-option custom-control-input js--chose-region" data-region="{{ key }}">
+                                <input type="checkbox"
+                                       {% if (subscribedTo is not empty and attribute(subscribedTo, key) is not empty) or (subscribedTo is empty and key == 'world') %}checked{% endif %}
+                                       class="js--input-option custom-control-input js--chose-region"
+                                       data-region="{{ key }}">
                                 <span class="custom-control-indicator"></span>
                                 <span class="custom-control-description">{{ label }}</span>
                             </label>
@@ -29,7 +32,8 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
-                    <select class="js--input-option custom-select col-1 js--how-many-guilds" title="Chose how many guilds you want alert for">
+                    <select class="js--input-option custom-select col-1 js--how-many-guilds"
+                            title="Chose how many guilds you want alert for">
                         <option value="3" {% if howMuch == 1 %}selected{% endif %}>1 guild</option>
                         <option value="3" {% if howMuch == 3 %}selected{% endif %}>3 guilds</option>
                         <option value="5" {% if howMuch == 5 %}selected{% endif %}>5 guilds</option>
@@ -47,10 +51,12 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
-                    <select class="js--input-option custom-select col-1 js--streamlabs-type" title="What type will it be ?">
+                    <select class="js--input-option custom-select col-1 js--streamlabs-type"
+                            title="What type will it be ?">
                         {#follow, subscription, donation, or host#}
                         <option value="follow" {% if type == "follow" %}selected{% endif %}>Follow</option>
-                        <option value="subscription" {% if type == "subscription" %}selected{% endif %}>Subscription</option>
+                        <option value="subscription" {% if type == "subscription" %}selected{% endif %}>Subscription
+                        </option>
                         <option value="donation" {% if type == "donation" %}selected{% endif %}>Donation</option>
                         <option value="host" {% if type == "host" %}selected{% endif %}>Host</option>
                     </select>
@@ -64,7 +70,8 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
-                    <input type="text" class="form-control js--sound" value="{{ sound }}" title="Image Link" placeholder="Sound Link (http://image.mp3)" />
+                    <input type="text" class="form-control js--sound" value="{{ sound }}" title="Image Link"
+                           placeholder="Sound Link (http://image.mp3)"/>
                 </div>
             </div>
         </div>
@@ -82,6 +89,22 @@
                         </button>
                     {% endif %}
                 </h4>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1">
+                    <button class="btn btn-secondary btn-block js--send-test-notification" style="display:none;">
+                        Send test notification to streamlabs
+                    </button>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1 js--error-test-notification" style="display:none; margin-top:1rem;">
+                    <div class="alert alert-danger">
+                        An error has occured when sending the test notification.
+                        Try <a class="alert-link" href="https://streamlabs.com/api/v1.0/authorize?response_type=code&client_id={{ streamlabsClient }}&redirect_uri={{ streamlabsRedirect }}&scope=alerts.create">
+                            reconnecting</a> or <a class="alert-link" href="mailto:contact@prograce.info">contact us</a>.
+                    </div>
+                </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-sm-11 offset-sm-1 js--error">

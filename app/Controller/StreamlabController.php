@@ -112,6 +112,9 @@ SQL;
             'howMuch' => $howMuch,
             'type' => $options['type'] ?? '',
             'sound' => $options['sound'] ?? '',
+            'application_public_key' => Config::getInstance()->get('webPush')['publicKey'] ?? '',
+            'streamlabsRedirect' => Config::getInstance()->get('streamlabs')['redirect'] ?? '',
+            'streamlabsClient' => Config::getInstance()->get('streamlabs')['clientId'] ?? '',
         ]);
     }
 
@@ -153,5 +156,58 @@ SQL;
         }
 
         $stmt->table('streamlabs')->where('twitch_id', '=', $_SESSION['twitch_id'])->execute();
+    }
+
+    public function sendTest(Request $request, Response $response)
+    {
+        if (empty($_SESSION['twitch_id'])) {
+            return $response->withStatus(400);
+        }
+
+        $streamlabSub = PDO::getInstance()->select()->from('streamlabs')->where('twitch_id', '=', $_SESSION['twitch_id'])->execute()->fetch();
+
+        if (empty($streamlabSub)) {
+            return $response->withStatus(400);
+        }
+
+        $curl = new Curl();
+        $curl->setDefaultJsonDecoder($assoc = true);
+        $curl->post('https://streamlabs.com/api/v1.0/token', [
+            'grant_type' => 'refresh_token',
+            'client_id' => Config::getInstance()->get('streamlabs')['clientId'] ?? '',
+            'client_secret' => Config::getInstance()->get('streamlabs')['clientSecret'] ?? '',
+            'redirect_uri' => Config::getInstance()->get('streamlabs')['redirect'] ?? '',
+            'refresh_token' => $streamlabSub['refresh_token'],
+        ]);
+
+        $refreshToken = $curl->response;
+
+        if(!empty($refreshToken['error'])) {
+            return $response->withStatus(400);
+        }
+
+        PDO::getInstance()
+            ->update(['access_token' => $refreshToken['access_token'], 'refresh_token' => $refreshToken['refresh_token']])
+            ->table('streamlabs')
+            ->where('twitch_id', '=', $_SESSION['twitch_id'])
+            ->execute();
+
+        $optionsSub = \json_decode($streamlabSub['options'], true);
+
+        $curl = new Curl();
+        $curl->setDefaultJsonDecoder($assoc = true);
+        $curl->post('https://streamlabs.com/api/v1.0/alerts', [
+            'access_token' => $refreshToken['access_token'],
+            'type' => $optionsSub['type'] ?? 'follow',
+            'image_href' => 'https://prograce.info/img/124828_screen.jpg',
+            'message' => 'Test has been killed by test: World 1st, EU 1st',
+            'sound_href' => $options['sound'] ?? '',
+        ]);
+
+        if(!empty($curl->response['error'])) {
+            return $response->withStatus(400);
+        }
+
+        return $response->withStatus(204);
     }
 }
