@@ -86,7 +86,11 @@ SQL;
 
     public function streamRegisterAction(Request $request, Response $response)
     {
-        $streamlab = PDO::getInstance()->select([])->from('streamlabs')->execute()->fetch();
+        if (!empty($_SESSION['twitch_id'])) {
+            return $response->withHeader('Location', $this->container->router->pathFor('streamErrorPage'));
+        }
+
+        $streamlab = PDO::getInstance()->select([])->from('streamlabs')->where('twitch_id', '=', $_SESSION['twitch_id'])->execute()->fetch();
 
         if (empty($streamlab)) {
             return $response->withHeader('Location', $this->container->router->pathFor('streamErrorPage'));
