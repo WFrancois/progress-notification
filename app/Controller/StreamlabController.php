@@ -86,7 +86,7 @@ SQL;
 
     public function streamRegisterAction(Request $request, Response $response)
     {
-        if (!empty($_SESSION['twitch_id'])) {
+        if (empty($_SESSION['twitch_id'])) {
             return $response->withHeader('Location', $this->container->router->pathFor('streamErrorPage'));
         }
 
