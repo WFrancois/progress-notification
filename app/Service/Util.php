@@ -25,17 +25,14 @@ class Util
     public static function getBossName(int $bossId): string
     {
         $bossIds = [
-            125075 => 'Varimathras',
-            124691 => 'Aggramar',
-            124393 => 'Portal Keeper Hasabel',
-            122468 => 'The Coven of Shivarra',
-            126916 => 'Felhounds of Sargeras',
-            123371 => 'Garothi Worldbreaker',
-            122367 => 'Antoran High Command',
-            125050 => 'Kin\'garoth',
-            125055 => 'Imonar the Soulhunter',
-            125562 => 'Eonar the Life-Binder',
-            124828 => 'Argus the Unmaker',
+            133298 => 'Fetid Devourer',
+            132998 => 'G\'huun',
+            140853 => 'MOTHER',
+            136383 => 'Mythrax the Unraveler',
+            137119 => 'Taloc',
+            134442 => 'Vectis',
+            134445 => 'Zek\'voz, Herald of N\'zoth',
+            138967 => 'Zul, Reborn',
         ];
 
         return $bossIds[$bossId] ?? '';
