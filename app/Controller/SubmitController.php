@@ -93,7 +93,7 @@ class SubmitController extends BaseController
 
     private function sendPushApi($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
     {
-        $messageText = $guildName . ' killed ' . $bossName . ' World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
+        $messageText = $guildName . ' killed ' . $bossName . ': World ' . Util::getOrdinal($rankWorld) . ', ' . $regionShortName . ' ' . Util::getOrdinal($rankRegion);
         $time = microtime(true);
 
         $query = 'SELECT * FROM subscribers WHERE ';
