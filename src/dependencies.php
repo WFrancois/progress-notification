@@ -20,6 +20,7 @@ $container['view'] = function ($c) {
     $view->getEnvironment()->addGlobal('session', $_SESSION);
     $view->getEnvironment()->addGlobal('currentUrl', $c['request']->getUri()->getPath());
     $view->getEnvironment()->addGlobal('ASSET_VERSION', ASSET_VERSION);
+    $view->getEnvironment()->addGlobal('raidName', \ProgressNotification\Service\Config::getInstance()->get('raidName', 'RAID_NAME'));
 
     return $view;
 };
