@@ -34,8 +34,8 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-type'])->withStatus(400);
         }
 
-        if ($this->payload['raid']['id'] != 8638) {
-            Log::add('only-log-antorus', ['payload' => $this->payload]);
+        if ($this->payload['raid']['id'] != 9389) {
+            Log::add('only-log-uldir', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'only-log-antorus']);
         }
 
