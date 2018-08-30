@@ -10,11 +10,17 @@
             "homepage": "https://wisak.eu"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/WFrancois/Slim-PDO"
+        }
+    ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "slim/slim": "^3.1",
         "slim/twig-view": "^2.2",
-        "slim/pdo": "~1.9",
+        "slim/pdo": "dev-master",
         "php-amqplib/php-amqplib": "^2.7",
         "php-curl-class/php-curl-class": "^8.0"
     },
