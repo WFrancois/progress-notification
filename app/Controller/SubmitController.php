@@ -89,6 +89,8 @@ class SubmitController extends BaseController
 
         $this->sendPushApi($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
         $this->sendStreamlabs($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
+
+        return $response->withStatus(204);
     }
 
     private function sendPushApi($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
@@ -165,7 +167,7 @@ class SubmitController extends BaseController
             $messageBroker = [
                 'pushInfo' => $subscriber['twitch_id'],
                 'message' => $messageText,
-                'image' => 'https://prograce.info/img/' . $bossId . '_screen.jpg',
+                'image' => 'https://prograce.info/img/header.jpg',
                 'sound' => $options['sound'] ?? '',
                 'type' => $options['type'] ?? 'follow'
             ];

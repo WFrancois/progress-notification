@@ -203,7 +203,7 @@ SQL;
         $curl->post('https://streamlabs.com/api/v1.0/alerts', [
             'access_token' => $refreshToken['access_token'],
             'type' => $optionsSub['type'] ?? 'follow',
-            'image_href' => 'https://prograce.info/img/124828_screen.jpg',
+            'image_href' => 'https://prograce.info/img/header.jpg',
             'message' => 'Test has been killed by test: World 1st, EU 1st',
             'sound_href' => $options['sound'] ?? '',
         ]);
