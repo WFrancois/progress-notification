@@ -14,6 +14,8 @@ use Slim\Http\Response;
 
 class SubmitController extends BaseController
 {
+    private const FIRST_BOSS_ID = 137119;
+
     private $payload = [];
 
     public function submitKill(Request $request, Response $response)
@@ -75,6 +77,11 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region-short-name'])->withStatus(400);
         }
 
+        if ($this->removeFilterDelayedInformation()) {
+            Log::add('filtered', ['payload' => $this->payload]);
+            return $response->withJson(['message' => 'filtered'])->withStatus(200);
+        }
+
         $bossId = (int)$this->payload['boss']['id'];
         $rankWorld = (int)$this->payload['bossRanks']['world']['new'];
         $rankRegion = (int)$this->payload['bossRanks']['region']['new'];
@@ -91,6 +98,28 @@ class SubmitController extends BaseController
         $this->sendStreamlabs($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
 
         return $response->withStatus(204);
+    }
+
+    /**
+     * For each boss, I receive two payload, one instant, one delayed
+     * For the first boss, I wait the delayed notification before sending notification
+     * For the rest, I send it instantly
+     * @return bool
+     */
+    private function removeFilterDelayedInformation(): bool
+    {
+        $buffered = $this->payload['buffered'];
+        $bossId = (int) $this->payload['boss']['id'];
+
+        if ($bossId === self::FIRST_BOSS_ID && !$buffered) {
+            return true;
+        }
+
+        if ($bossId !== self::FIRST_BOSS_ID && $buffered) {
+            return true;
+        }
+
+        return false;
     }
 
     private function sendPushApi($rankWorld, $rankRegion, $region, $regionShortName, $bossId, $bossName, $guildUrl, $guildName)
