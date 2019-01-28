@@ -205,7 +205,7 @@ SQL;
             'type' => $optionsSub['type'] ?? 'follow',
             'image_href' => 'https://prograce.info/img/header.jpg',
             'message' => 'Test has been killed by test: World 1st, EU 1st',
-            'sound_href' => $options['sound'] ?? '',
+            'sound_href' => $optionsSub['sound'] ?? '',
         ]);
 
         if(!empty($curl->response['error'])) {
