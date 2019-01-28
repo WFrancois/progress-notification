@@ -196,7 +196,7 @@ class SubmitController extends BaseController
             $messageBroker = [
                 'pushInfo' => $subscriber['twitch_id'],
                 'message' => $messageText,
-                'image' => 'https://prograce.info/img/header.jpg',
+                'image' => 'https://prograce.info/img/header_streamlabs.jpg',
                 'sound' => $options['sound'] ?? '',
                 'type' => $options['type'] ?? 'follow'
             ];
