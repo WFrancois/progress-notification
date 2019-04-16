@@ -25,15 +25,8 @@ class Util
     public static function getBossName(int $bossId): string
     {
         $bossIds = [
-            144680 => 'Champion of the Light',
-            148117 => 'Grong',
-            148238 => 'Jadefire Masters',
-            147564 => 'Opulence',
-            144747 => 'Conclave of the Chosen',
-            145616 => 'King Rastakhan',
-            144838 => 'High Tinker Mekkatorque',
-            146256 => 'Stormwall Blockade',
-            149684 => 'Lady Jaina Proudmoore',
+            146497 => 'The Restless Cabal',
+            145371 => 'Uu\'nat, Harbinger of the Void',
         ];
 
         return $bossIds[$bossId] ?? '';

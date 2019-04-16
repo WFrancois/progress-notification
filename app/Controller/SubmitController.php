@@ -14,7 +14,7 @@ use Slim\Http\Response;
 
 class SubmitController extends BaseController
 {
-    private const FIRST_BOSS_ID = 144680;
+    private const FIRST_BOSS_ID = 146497;
 
     private $payload = [];
 
@@ -36,7 +36,7 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-type'])->withStatus(400);
         }
 
-        if ($this->payload['raid']['id'] != 10076) {
+        if ($this->payload['raid']['id'] != 10057) {
             Log::add('only-log-dazaralor', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'only-log-antorus']);
         }
