@@ -37,8 +37,8 @@ class SubmitController extends BaseController
         }
 
         if ($this->payload['raid']['id'] != 10057) {
-            Log::add('only-log-dazaralor', ['payload' => $this->payload]);
-            return $response->withJson(['error' => 'only-log-antorus']);
+            Log::add('only-log-current-raid', ['payload' => $this->payload]);
+            return $response->withJson(['error' => 'only-log-current-raid']);
         }
 
         if ($this->payload['difficulty'] !== 'mythic') {
