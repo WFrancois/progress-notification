@@ -14,7 +14,8 @@ use Slim\Http\Response;
 
 class SubmitController extends BaseController
 {
-    private const FIRST_BOSS_ID = 146497;
+    // (no first boss id for CoS)
+    private const FIRST_BOSS_ID = 0;
 
     private $payload = [];
 
