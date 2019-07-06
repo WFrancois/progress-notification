@@ -14,8 +14,8 @@ use Slim\Http\Response;
 
 class SubmitController extends BaseController
 {
-    // (no first boss id for CoS)
-    private const FIRST_BOSS_ID = 0;
+    private const FIRST_BOSS_ID = 155144;
+    private const CURRENT_RAID_ID = 10076;
 
     private $payload = [];
 
@@ -37,7 +37,7 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'incorrect-type'])->withStatus(400);
         }
 
-        if ($this->payload['raid']['id'] != 10057) {
+        if ($this->payload['raid']['id'] != self::CURRENT_RAID_ID) {
             Log::add('only-log-current-raid', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'only-log-current-raid']);
         }
@@ -78,16 +78,21 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region-short-name'])->withStatus(400);
         }
 
-        if ($this->removeFilterDelayedInformation()) {
-            Log::add('filtered', ['payload' => $this->payload]);
-            return $response->withJson(['message' => 'filtered'])->withStatus(200);
-        }
-
         $bossId = (int)$this->payload['boss']['id'];
         $rankWorld = (int)$this->payload['bossRanks']['world']['new'];
         $rankRegion = (int)$this->payload['bossRanks']['region']['new'];
         $guildName = $this->payload['guild']['name'];
         $region = $this->payload['region']['slug'];
+
+        if (!isset(Util::REGION[$region])) {
+            Log::add('incorrect-region', ['payload' => $this->payload]);
+            return $response->withJson(['message' => 'incorrect-region'])->withStatus(400);
+        }
+
+        if ($this->removeFilterDelayedInformation()) {
+            Log::add('filtered', ['payload' => $this->payload]);
+            return $response->withJson(['message' => 'filtered'])->withStatus(200);
+        }
 
         $bossName = Util::getBossName($bossId);
         if (!empty($this->payload['boss']['name'])) {
