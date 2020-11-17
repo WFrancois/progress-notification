@@ -1,5 +1,5 @@
 {
-    "name": "WFrancois/log-stream",
+    "name": "wfrancois/prograce",
     "description": "Notify on kill",
     "homepage": "https://github.com/WFrancois/progress-notification",
     "license": "MIT",
@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
+        "ext-json": "*",
         "slim/slim": "^3.1",
         "slim/twig-view": "^2.2",
         "slim/pdo": "^1.10.1",
