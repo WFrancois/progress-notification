@@ -73,7 +73,7 @@ class SubmitController extends BaseController
             return $response->withJson(['error' => 'missing-region'])->withStatus(400);
         }
 
-        if (empty($this->payload['region']['shortName'])) {
+        if (empty($this->payload['region']['short_name'])) {
             Log::add('missing-region-name', ['payload' => $this->payload]);
             return $response->withJson(['error' => 'missing-region-short-name'])->withStatus(400);
         }
@@ -100,8 +100,8 @@ class SubmitController extends BaseController
         }
 
 
-        $this->sendPushApi($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
-        $this->sendStreamlabs($rankWorld, $rankRegion, $region, $this->payload['region']['shortName'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
+        $this->sendPushApi($rankWorld, $rankRegion, $region, $this->payload['region']['short_name'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
+        $this->sendStreamlabs($rankWorld, $rankRegion, $region, $this->payload['region']['short_name'], $bossId, $bossName, $this->payload['guildProfileUrl'], $guildName);
 
         return $response->withStatus(204);
     }
